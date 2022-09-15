@@ -1,7 +1,9 @@
 package com.devforce.devForce;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class DevForce2023Application {
@@ -10,4 +12,10 @@ public class DevForce2023Application {
 		SpringApplication.run(DevForce2023Application.class, args);
 	}
 
+	@Bean
+	public CommandLineRunner initData() {
+		System.out.println("--------- Hola crack, llegaste! ---------");
+		return (args) -> {
+		};
+	}
 }
