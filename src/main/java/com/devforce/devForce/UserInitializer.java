@@ -32,6 +32,8 @@ public class UserInitializer implements CommandLineRunner {
 
         if(datosDePrueba){
 
+            // TODO faltan las relaciones. Actualizar una vez hechas las mismas para generar los objetos correctos.
+
             Faker faker = new Faker();
 
             System.out.println("------------ USUARIOS -------------");
