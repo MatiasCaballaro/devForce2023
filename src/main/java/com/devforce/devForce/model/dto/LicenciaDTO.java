@@ -20,6 +20,5 @@ public class LicenciaDTO {
     private LocalDate vencimiento;
     private String plataforma;
     private List<Solicitud> solicitudes;
-    // TODO: Hacer LicenciaDTO
 
 }
