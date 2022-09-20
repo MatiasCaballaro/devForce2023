@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/api/admin")
 public class AdminController {
-    //@PostMapping("/registrarUsuario")
-    //@PostMapping("/asignarLicencia")
-    //@GetMapping("/licencias")
+//    @PostMapping("/registrarUsuario")
+//    @PostMapping("/asignarLicencia")
+//    @GetMapping("/licencias")
 }
