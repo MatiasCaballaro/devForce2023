@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,7 +31,9 @@ public class Licencia {
     @Column(name ="plataforma", length = 25)
     private String plataforma;
 
-    // TODO Relacion con solicitud OneToMany
+    //Relación con solicitud
+    @OneToMany(mappedBy="licencia", fetch=FetchType.EAGER)
+    private List<Solicitud> solicitudes;
 
 
 

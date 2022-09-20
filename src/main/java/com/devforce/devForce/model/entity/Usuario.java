@@ -3,6 +3,7 @@ package com.devforce.devForce.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,6 +43,8 @@ public class Usuario {
     private String mentorArea;
 
     // TODO Relacion con solicitudes oneToMany
+    @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
+    private List<Solicitud> solicitudes;
 
     // TODO Hacer los roles
 

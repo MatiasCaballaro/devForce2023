@@ -1,5 +1,6 @@
 package com.devforce.devForce.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,8 +39,21 @@ public class Solicitud {
     private int tiempoSolicitado;
 
 
-    // TODO Relacion con usuario ManyToONE
+    //Relación con usuario
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="usuario_id")
+    private Usuario usuario;
 
-    // TODO Relacion con licencia ManyToONe
+    //Relación con licencia
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="licencia_id")
+    private Licencia licencia;
 
+    public Solicitud(String tipo, String descripcion, String area, Usuario usuario) {
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.area = area;
+        this.usuario = usuario;
+    }
 }
