@@ -25,8 +25,20 @@ public class SolicitudController {
         return null;
     }
 
-//    @GetMapping("/solicitudesmentor")
-//    @GetMapping("/solicitudesadmin")
-//    @PostMapping("/nuevaSolicitud")
+    @GetMapping("/solicitudesmentor")
+    public List<SolicitudDTO> solicitudesMentor (@RequestParam long id){
+        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
+        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
+        return null;
+    }
+
+    @GetMapping("/solicitudesadmin")
+    public List<SolicitudDTO> solicitudesAdmin (@RequestParam long id){
+        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
+        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
+        return null;
+    }
+
+    //@PostMapping("/nuevaSolicitud")
 
 }
