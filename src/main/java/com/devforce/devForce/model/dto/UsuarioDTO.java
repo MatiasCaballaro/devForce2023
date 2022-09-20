@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UsuarioDTO {
     //Atributos
-        private long id;
-        private String nombre;
-        private String apellido;
-        private String username;
-        private String email;
-        private String phone;
-        private Boolean hasTeams;
-        private String mentorArea;
-        private List<SolicitudDTO> solicitudes;
-        //TODO: AGREGAR ROLES
+    private long id;
+    private String nombre;
+    private String apellido;
+    private String username;
+    private String email;
+    private String phone;
+    private Boolean hasTeams;
+    private String mentorArea;
+    private List<SolicitudDTO> solicitudes;
+    //TODO: AGREGAR ROLES
 
     //Constructor
     //TODO: CAMBIAR AL SERVICIO DEL USUARIO
