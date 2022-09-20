@@ -12,6 +12,5 @@ public class RespuestaDTO {
     private boolean ok;
     private String mensaje;
     private Object contenido;
-
 }
 
