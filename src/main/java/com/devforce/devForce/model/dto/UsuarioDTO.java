@@ -1,6 +1,7 @@
 package com.devforce.devForce.model.dto;
 
 import com.devforce.devForce.model.entity.Solicitud;
+import com.devforce.devForce.model.entity.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +15,33 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioDTO {
-    // TODO: Hacer UsuarioDTO
-    private long id;
-    private String nombre;
-    private String apellido;
-    private String username;
-    private String email;
-    private String password;
-    private String phone;
-    private Boolean hasTeams;
-    private String mentorArea;
-    private List<Solicitud> solicitudes;
+    //Atributos
+        private long id;
+        private String nombre;
+        private String apellido;
+        private String username;
+        private String email;
+        private String phone;
+        private Boolean hasTeams;
+        private String mentorArea;
+        private List<SolicitudDTO> solicitud;
+        //TODO: AGREGAR ROLES
+
+    //Constructor
+    //TODO: CAMBIAR AL SERVICIO DEL USUARIO
+    /*
+        public UsuarioDTO (Usuario usuario)
+        {
+            this.id = usuario.getId();
+            this.nombre = usuario.getNombre();
+            this.apellido = usuario.getApellido();
+            this.username = usuario.getUsername();
+            this.email = usuario.getEmail();
+            this.password = usuario.getPassword();
+            this.phone = usuario.getPhone();
+            this.hasTeams = usuario.getHasTeams();
+            this.mentorArea = usuario.getMentorArea();
+            this.solicitudes = usuario.getSolicitudes();
+        }
+     */
 }
