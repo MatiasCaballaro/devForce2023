@@ -7,7 +7,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/usuario")
 public class UsuarioController {
 //    @PutMapping("/updatedatos")
-//    @GetMapping("/test/usuario")
-//    @GetMapping("/test/usuarios")
-//    @GetMapping("/test/usuariosDTO")
 }
