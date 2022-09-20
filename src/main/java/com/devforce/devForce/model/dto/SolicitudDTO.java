@@ -1,7 +1,22 @@
 package com.devforce.devForce.model.dto;
 
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class SolicitudDTO {
 
-    // TODO: Hacer el SolicitudDTO
-
+    private long id;
+    private String tipo;
+    private String descripcion;
+    private String estado;
+    private String area;
+    private int apruebaMentorID;
+    private int apruebaAdminID;
+    private int tiempoSolicitado;
+    private UsuarioDTO usuarioDTO;
+    private LicenciaDTO licenciaDTO;
 }
