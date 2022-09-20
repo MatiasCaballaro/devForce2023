@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class UsuarioDTO {
         private String phone;
         private Boolean hasTeams;
         private String mentorArea;
-        private List<SolicitudDTO> solicitud;
+        private List<SolicitudDTO> solicitudes;
         //TODO: AGREGAR ROLES
 
     //Constructor
@@ -37,11 +38,10 @@ public class UsuarioDTO {
             this.apellido = usuario.getApellido();
             this.username = usuario.getUsername();
             this.email = usuario.getEmail();
-            this.password = usuario.getPassword();
             this.phone = usuario.getPhone();
             this.hasTeams = usuario.getHasTeams();
             this.mentorArea = usuario.getMentorArea();
-            this.solicitudes = usuario.getSolicitudes();
+            this.solicitudes = usuario.getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
         }
-     */
+    */
 }
