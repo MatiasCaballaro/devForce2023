@@ -25,10 +25,12 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Override
     public List<Licencia> getLicencias() {
         return licenciaRepository.findAll();
     }
 
+    @Override
     public List<LicenciaDTO> getLicenciasDTO() {
         return licenciaRepository.findAll().stream().map(licencia -> createLicenciaDTO(licencia)).collect(Collectors.toList());
     }
@@ -39,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
                 licencia.getVencimiento(), licencia.getPlataforma(), licencia.getSolicitudes());
         return licenciaDTO;
     }
-
+    @Override
     public ResponseEntity<RespuestaDTO> crearUsuario(Usuario usuario) {
 
         // TODO FALTA SECURITY SERVICE
@@ -57,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
         return new ResponseEntity<>(respuestaDTO, HttpStatus.CREATED);
     }
 
-    //@Override
+    @Override
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud) {
         RespuestaDTO respuestaDTO;
 
