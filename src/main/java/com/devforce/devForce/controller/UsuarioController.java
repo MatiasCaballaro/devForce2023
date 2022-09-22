@@ -24,6 +24,9 @@ public class UsuarioController {
     public Usuario testUsuario() {
         return usuarioRepository.findAll().stream().findAny().get();
     }
-//    @GetMapping("/test/usuarios")
-//    @GetMapping("/test/usuariosDTO")
+
+    @GetMapping("/test/usuarios")
+    public List<Usuario> testUsuarios() {
+        return usuarioRepository.findAll();
+    }
 }
