@@ -1,10 +1,18 @@
 package com.devforce.devForce.controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.devforce.devForce.model.entity.Usuario;
+import com.devforce.devForce.service.impl.UsuarioServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/usuario")
 public class UsuarioController {
-//    @PutMapping("/updatedatos")
+
+    @Autowired
+    UsuarioServiceImpl usuarioServiceImpl;
+
+    @PutMapping("/updatedatos")
+    public Usuario updateDatos(@RequestParam long id, @RequestBody Usuario usuario) {
+
+        return usuarioServiceImpl.updateDatos(usuario);
+    }
 }

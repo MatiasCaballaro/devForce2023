@@ -20,7 +20,7 @@ public class SolicitudController {
 
     @GetMapping("/solicitudesusuario")
     public List<SolicitudDTO> solicitudesUsuario (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
+        //TODO: Cambiar requestParam por el authentication y cambiar el return por un servicio.
         //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
         return null;
     }
