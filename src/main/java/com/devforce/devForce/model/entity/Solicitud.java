@@ -29,6 +29,9 @@ public class Solicitud {
     @Column(name ="area", length = 50)
     private String area;
 
+    @Column(name = "link", length = 250)
+    private String link;
+
     @Column(name ="apruebaMentorID")
     private int apruebaMentorID;
 
@@ -49,6 +52,7 @@ public class Solicitud {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="licencia_id")
     private Licencia licencia;
+
 
     public Solicitud(String tipo, String descripcion, String area, Usuario usuario) {
         this.tipo = tipo;

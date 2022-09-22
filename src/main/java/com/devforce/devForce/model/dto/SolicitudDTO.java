@@ -14,6 +14,7 @@ public class SolicitudDTO {
     private String descripcion;
     private String estado;
     private String area;
+    private String link;
     private int apruebaMentorID;
     private int apruebaAdminID;
     private int tiempoSolicitado;
