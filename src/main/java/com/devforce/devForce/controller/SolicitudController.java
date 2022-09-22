@@ -1,5 +1,6 @@
 package com.devforce.devForce.controller;
 import com.devforce.devForce.model.dto.SolicitudDTO;
+import com.devforce.devForce.model.dto.UsuarioDTO;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.SolicitudRepository;
@@ -46,5 +47,10 @@ public class SolicitudController {
     public List<Solicitud> testSolicitudes() {
         return solicitudRepository.findAll();
     }
-    //@GetMapping("/test/solicitudesDTO")
+    @GetMapping("/test/solicitudesDTO")
+    public List<SolicitudDTO> testSolicitudesDTO() {
+        // TODO : Cambiar el return por un servicio
+        // return solicitudRepository.findAll();
+        return null;
+    }
 }
