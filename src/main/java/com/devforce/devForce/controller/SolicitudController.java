@@ -1,5 +1,7 @@
 package com.devforce.devForce.controller;
 import com.devforce.devForce.model.dto.SolicitudDTO;
+import com.devforce.devForce.model.dto.UsuarioDTO;
+import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.SolicitudRepository;
 import com.devforce.devForce.repository.UsuarioRepository;
@@ -20,7 +22,7 @@ public class SolicitudController {
 
     @GetMapping("/solicitudesusuario")
     public List<SolicitudDTO> solicitudesUsuario (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
+        //TODO: Cambiar requestParam por el authentication y cambiar el return por un servicio.
         //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
         return null;
     }
@@ -40,6 +42,15 @@ public class SolicitudController {
     }
 
     //@PostMapping("/nuevaSolicitud")
-    // EL BOCA JUNIORS DE HUGO IBARRA ES INVENCIBLE, A SUPERADO TODOS LOS ESTANDARES PROPUESTOS POR CONMEBOL
-    //cREO QUE ES HORA DE QUE BOCA JUEGUE LA CHAMPIONS O QUE SE ANOTE COMO SELECCION EN QATAR 2022, SERIA LO MAS JUSTO
+
+    @GetMapping("/test/solicitudes")
+    public List<Solicitud> testSolicitudes() {
+        return solicitudRepository.findAll();
+    }
+    @GetMapping("/test/solicitudesDTO")
+    public List<SolicitudDTO> testSolicitudesDTO() {
+        // TODO : Cambiar el return por un servicio
+        // return solicitudRepository.findAll();
+        return null;
+    }
 }
