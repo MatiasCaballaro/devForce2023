@@ -1,9 +1,10 @@
 package com.devforce.devForce.service;
 
 import com.devforce.devForce.model.entity.Usuario;
+import org.springframework.http.ResponseEntity;
 
 public interface UsuarioService {
 
-    public Usuario actualizarDatos(Usuario usuario);
+    public ResponseEntity<Object> actualizarDatos(Usuario usuario);
 
 }
