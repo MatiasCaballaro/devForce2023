@@ -40,8 +40,6 @@ public class SolicitudController {
     }
 
     //@PostMapping("/nuevaSolicitud")
-    // EL BOCA JUNIORS DE HUGO IBARRA ES INVENCIBLE, A SUPERADO TODOS LOS ESTANDARES PROPUESTOS POR CONMEBOL
-    //cREO QUE ES HORA DE QUE BOCA JUEGUE LA CHAMPIONS O QUE SE ANOTE COMO SELECCION EN QATAR 2022, SERIA LO MAS JUSTO
 
     //@GetMapping("/test/solicitudes")
     //@GetMapping("/test/solicitudesDTO")
