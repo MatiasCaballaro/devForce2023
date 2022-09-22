@@ -10,3 +10,5 @@ public interface SolicitudService {
     List<SolicitudDTO> getSolicitudesMentor(Usuario usuario);
     List<SolicitudDTO> getSolicitudesAdmin(Usuario usuario);
 }
+
+//api

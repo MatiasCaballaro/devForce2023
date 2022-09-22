@@ -24,7 +24,7 @@ public class SolicitudServiceImpl implements SolicitudService {
 
     @Override
     public List<SolicitudDTO> getSolicitudesMentor(Usuario usuario) {
-        List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter()
+        List<SolicitudDTO> solicitudes = usuario.getSolicitudes().stream().filter(usuario -> usuario.getArea().equals(Solicitud.)).map(SolicitudDTO::new).collect(Collectors.toList());
         return solicitudes;
     }
 
