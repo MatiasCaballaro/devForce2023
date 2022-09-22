@@ -13,7 +13,7 @@ public class UsuarioController {
     @Autowired
     UsuarioServiceImpl usuarioServiceImpl;
     @Autowired
-    UsuarioRepository usuariosRepository;
+    UsuarioRepository usuarioRepository;
 
     @PutMapping("/updatedatos")
     public Usuario updateDatos(@RequestBody Usuario usuario) {
@@ -21,7 +21,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/test/usuarios")
-    public List<Usuario> testUsuarios() {
-        return usuariosRepository.findAll();
+    public Usuario testUsuarios() {
+        return usuarioRepository.findAll().stream().findAny().get();
     }
 }
