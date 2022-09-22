@@ -1,4 +1,9 @@
 package com.devforce.devForce.service.impl;
 
-public class SolicitudServiceImpl {
+import com.devforce.devForce.service.SolicitudService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SolicitudServiceImpl implements SolicitudService {
+
 }
