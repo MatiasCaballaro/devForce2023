@@ -42,7 +42,6 @@ public class Usuario {
     @Column(name ="mentorArea", length = 25)
     private String mentorArea;
 
-    // TODO Relacion con solicitudes oneToMany
     @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
     private List<Solicitud> solicitudes;
 
