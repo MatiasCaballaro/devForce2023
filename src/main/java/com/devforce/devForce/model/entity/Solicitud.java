@@ -53,6 +53,7 @@ public class Solicitud {
     @JoinColumn(name="licencia_id")
     private Licencia licencia;
 
+
     public Solicitud(String tipo, String descripcion, String area, Usuario usuario) {
         this.tipo = tipo;
         this.descripcion = descripcion;
