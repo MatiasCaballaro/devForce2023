@@ -8,16 +8,14 @@ import org.springframework.context.annotation.Bean;
 import javax.persistence.Column;
 
 @SpringBootApplication
-public class DevForce2023Application
-{
+public class DevForce2023Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DevForce2023Application.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner initData()
-	{
+	public CommandLineRunner initData() {
 		System.out.println(" --------- Hola crack, llegaste! --------- ");
 		return (args) -> {
 		};

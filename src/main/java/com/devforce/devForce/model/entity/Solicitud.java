@@ -29,6 +29,9 @@ public class Solicitud {
     @Column(name ="area", length = 50)
     private String area;
 
+    @Column(name = "link", length = 250)
+    private String link;
+
     @Column(name ="apruebaMentorID")
     private int apruebaMentorID;
 
