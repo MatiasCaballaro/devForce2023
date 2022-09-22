@@ -21,13 +21,11 @@ public class SolicitudServiceImpl implements SolicitudService {
         List<SolicitudDTO> solicitudes = usuario.getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
         return solicitudes;
     }
-
     @Override
     public List<SolicitudDTO> getSolicitudesMentor(Usuario usuario) {
-        List<SolicitudDTO> solicitudes = usuario.getSolicitudes().stream().filter(usuario -> usuario.getArea().equals(Solicitud.)).map(SolicitudDTO::new).collect(Collectors.toList());
+        List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> solicitud.getArea().equals(usuario.getMentorArea())).map(SolicitudDTO::new).collect(Collectors.toList());
         return solicitudes;
     }
-
     @Override
     public List<SolicitudDTO> getSolicitudesAdmin(Usuario usuario) {
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().map(SolicitudDTO::new).collect(Collectors.toList());
