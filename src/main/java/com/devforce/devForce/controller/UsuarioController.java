@@ -11,8 +11,7 @@ public class UsuarioController {
     UsuarioServiceImpl usuarioServiceImpl;
 
     @PutMapping("/updatedatos")
-    public Usuario updateDatos(@RequestParam long id, @RequestBody Usuario usuario) {
-
-        return usuarioServiceImpl.updateDatos(usuario);
+    public Usuario updateDatos(@RequestBody Usuario usuario) {
+        return usuarioServiceImpl.actualizarDatos(usuario);
     }
 }
