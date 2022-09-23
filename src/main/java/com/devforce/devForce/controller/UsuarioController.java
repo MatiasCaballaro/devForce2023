@@ -1,4 +1,5 @@
 package com.devforce.devForce.controller;
+import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.UsuarioDTO;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.UsuarioRepository;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 @RequestMapping("/api/usuario")
 public class UsuarioController {
 
@@ -19,7 +21,7 @@ public class UsuarioController {
     UsuarioRepository usuarioRepository;
 
     @PutMapping("/updatedatos")
-    public ResponseEntity<Object> updateDatos(@RequestBody Usuario usuario) {
+    public ResponseEntity<RespuestaDTO> updateDatos(@RequestBody Usuario usuario) {
         return usuarioServiceImpl.actualizarDatos(usuario);
     }
 

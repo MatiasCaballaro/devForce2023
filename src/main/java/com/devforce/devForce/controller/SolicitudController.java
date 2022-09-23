@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RestController
 @RequestMapping("/api/solicitudes")
 public class SolicitudController {
 
@@ -52,6 +53,6 @@ public class SolicitudController {
     }
     @GetMapping("/test/solicitudesDTO")
     public List<SolicitudDTO> testSolicitudesDTO() {
-        return solicitudServiceImpl.
+        return null;
     }
 }
