@@ -47,11 +47,10 @@ public class AdminServiceImpl implements AdminService {
         // TODO FALTA SECURITY SERVICE
 
         RespuestaDTO respuestaDTO;
-        if (usuarioRepository.findByUsername(usuario.getUsername()) != null) {
-
+        if ((usuarioRepository.findByUsername(usuario.getUsername()) != null) || (usuarioRepository.findByEmail(usuario.getEmail()) != null))
+        {
             respuestaDTO = new RespuestaDTO(false, "El usuario ya existe", null);
             return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
-
         }
         usuarioRepository.save(usuario);
 
