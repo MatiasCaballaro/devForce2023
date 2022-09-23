@@ -1,21 +1,34 @@
 package com.devforce.devForce.controller;
+import com.devforce.devForce.model.dto.LicenciaDTO;
+import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.SolicitudDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.devforce.devForce.model.entity.Solicitud;
+import com.devforce.devForce.model.entity.Usuario;
+import com.devforce.devForce.service.impl.AdminServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
 @RequestMapping("/api/admin")
 public class AdminController {
-//    @PostMapping("/registrarUsuario")
-//    @PostMapping("/asignarLicencia")
+    @Autowired
+    AdminServiceImpl adminServiceImpl;
+    @PostMapping("/registrarUsuario")
+    public ResponseEntity<RespuestaDTO> crearUsuario(@RequestBody Usuario usuario) {
+        return adminServiceImpl.crearUsuario(usuario);
+    }
+
+    @PostMapping("/asignarLicencia")
+    public ResponseEntity<RespuestaDTO> asignarLicencia(@RequestBody Solicitud solicitud){
+        return adminServiceImpl.asignarLicencia(solicitud);
+    }
+
     @GetMapping("/licencias")
-    public List<SolicitudDTO> obtenerLicencias (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el return por un servicio.
-        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
-        return null;
+    public List<LicenciaDTO> obtenerLicencias (){
+        return adminServiceImpl.getLicenciasDTO();
     }
 }
