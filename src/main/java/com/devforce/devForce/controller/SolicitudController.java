@@ -5,6 +5,7 @@ import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.SolicitudRepository;
 import com.devforce.devForce.repository.UsuarioRepository;
+import com.devforce.devForce.service.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,36 +13,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/api/solicitudes")
+@RestController
+@RequestMapping("/api")
 public class SolicitudController {
 
     @Autowired
     UsuarioRepository usuarioRepository;
     @Autowired
     SolicitudRepository solicitudRepository;
+    @Autowired
+    SolicitudService solicitudService;
 
     @GetMapping("/solicitudesusuario")
-    public List<SolicitudDTO> solicitudesUsuario (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el return por un servicio.
-        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
-        return null;
+    public List<SolicitudDTO> solicitudesUsuario (@RequestBody Usuario usuario){
+        //TODO: Cambiar requestBody por el authentication
+        return solicitudService.getSolicitudesUsuario(usuario);
     }
 
     @GetMapping("/solicitudesmentor")
-    public List<SolicitudDTO> solicitudesMentor (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
-        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
-        return null;
+    public List<SolicitudDTO> solicitudesMentor (@RequestBody Usuario usuario){
+        //TODO: Cambiar requestBody por el authentication
+        return solicitudService.getSolicitudesMentor(usuario);
     }
 
     @GetMapping("/solicitudesadmin")
-    public List<SolicitudDTO> solicitudesAdmin (@RequestParam long id){
-        //TODO: Cambiar requestParam por el authentication y cambiar el solicitudDTO por un servicio.
-        //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
-        return null;
+    public List<SolicitudDTO> solicitudesAdmin (@RequestBody Usuario usuario){
+        //TODO: Cambiar requestBody por el authentication
+        return solicitudService.getSolicitudesAdmin(usuario);
     }
 
-    //@PostMapping("/nuevaSolicitud")
+    @PostMapping("/nuevaSolicitud")
+    public Solicitud crearSolicitud(Solicitud solicitud, Usuario usuario){
+        return solicitudService.crearSolicitud(solicitud, usuario);
+    }
 
     @GetMapping("/test/solicitudes")
     public List<Solicitud> testSolicitudes() {
@@ -49,8 +53,6 @@ public class SolicitudController {
     }
     @GetMapping("/test/solicitudesDTO")
     public List<SolicitudDTO> testSolicitudesDTO() {
-        // TODO : Cambiar el return por un servicio
-        // return solicitudRepository.findAll();
         return null;
     }
 }

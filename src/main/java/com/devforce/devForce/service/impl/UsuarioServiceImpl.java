@@ -1,5 +1,6 @@
 package com.devforce.devForce.service.impl;
 
+import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.UsuarioRepository;
 import com.devforce.devForce.service.UsuarioService;
@@ -14,7 +15,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
     @Override
-    public ResponseEntity<Object> actualizarDatos(Usuario usuario) {
+    public ResponseEntity<RespuestaDTO> actualizarDatos(Usuario usuario) {
 
         Usuario usuarioSeleccionado = usuarioRepository.findByNombreAndApellido(usuario.getNombre(), usuario.getApellido());
 
@@ -25,7 +26,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioSeleccionado.setMentorArea(usuario.getMentorArea());
         usuarioRepository.save(usuarioSeleccionado);
 
-        return new ResponseEntity<>("Usuario actualizado",HttpStatus.CREATED);
+        RespuestaDTO respuestaDTO = new RespuestaDTO(true,"Datos actualizados",usuario);
+
+        return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
     }
 
 }
