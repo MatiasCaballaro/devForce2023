@@ -17,9 +17,9 @@ public class MentorServiceImpl implements MentorService {
 
     public RespuestaDTO verificarEstado(Solicitud solicitud) {
         RespuestaDTO respuestaDTO =  new RespuestaDTO();
-        if (!solicitud.getEstado().equals("PENDIENTE-MENTOR")){
+        if (!(solicitud.getEstado().equals("PENDIENTE-MENTOR"))){
             respuestaDTO.setOk(false);
-            respuestaDTO.setMensaje("Las solicitud no se encuentra en PENDIENTE MENTOR");
+            respuestaDTO.setMensaje("Las solicitud no se encuentra en PENDIENTE-MENTOR");
             respuestaDTO.setContenido(solicitud);
             return respuestaDTO;
         }
@@ -38,44 +38,51 @@ public class MentorServiceImpl implements MentorService {
     @Override
     public ResponseEntity<RespuestaDTO> aceptarSolicitud(Solicitud solicitud, Integer dias) {
 
-        if (!verificarEstado(solicitud).isOk()){
-            return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.BAD_REQUEST);
-        }
-        if (solicitud.getTipo().equals("OTROS") || solicitud.getTipo().equals("ASESORAMIENTO")){
-            solicitud.setEstado("ACEPTADO");
-        }
+        RespuestaDTO respuestaDTO = verificarEstado(solicitud);
 
-        if (solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA-PLATAFORMA")){
-            solicitud.setEstado("PENDIENTE-ADMIN");
-            solicitud.setTiempoSolicitado(dias);
+        if (!respuestaDTO.isOk()){
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+        } else {
+            if (solicitud.getTipo().equals("OTROS") || solicitud.getTipo().equals("ASESORAMIENTO")){
+                solicitud.setEstado("ACEPTADO");
+            }
+            if (solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA-PLATAFORMA")){
+                solicitud.setEstado("PENDIENTE-ADMIN");
+                solicitud.setTiempoSolicitado(dias);
+            }
+            solicitudRepository.save(solicitud);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
         }
-
-        solicitudRepository.save(solicitud);
-        return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.ACCEPTED);
     }
 
     @Override
     public ResponseEntity<RespuestaDTO> rechazarSolicitud(Solicitud solicitud) {
 
-        if (!verificarEstado(solicitud).isOk()){
-            return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.BAD_REQUEST);
-        }
+        RespuestaDTO respuestaDTO = verificarEstado(solicitud);
 
-        solicitud.setEstado("DENEGADO");
-        solicitudRepository.save(solicitud);
-        return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.ACCEPTED);
+        if (!respuestaDTO.isOk()){
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+        } else {
+            solicitud.setEstado("DENEGADO");
+            solicitudRepository.save(solicitud);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
+        }
     }
 
     @Override
     public ResponseEntity<RespuestaDTO> devolverSolicitud(Solicitud solicitud) {
 
-        if (!verificarEstado(solicitud).isOk()){
-            return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.BAD_REQUEST);
+        RespuestaDTO respuestaDTO = verificarEstado(solicitud);
+
+        if (!respuestaDTO.isOk()){
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+        } else {
+            solicitud.setEstado("DEVUELTA-USUARIO");
+            solicitudRepository.save(solicitud);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
         }
-
-        solicitud.setEstado("DEVUELTA-USUARIO");
-        solicitudRepository.save(solicitud);
-
-        return new ResponseEntity<>(verificarEstado(solicitud), HttpStatus.ACCEPTED);
     }
 }
