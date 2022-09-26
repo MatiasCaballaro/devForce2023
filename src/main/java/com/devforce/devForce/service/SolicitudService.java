@@ -14,4 +14,6 @@ public interface SolicitudService {
     public List<SolicitudDTO> getSolicitudesMentor(Usuario usuario);
     public List<SolicitudDTO> getSolicitudesAdmin(Usuario usuario);
     public Solicitud actualizarSolicitud(Solicitud solicitud, Usuario usuario);
+
+    public List<SolicitudDTO> testSolicitudesDTO();
 }
