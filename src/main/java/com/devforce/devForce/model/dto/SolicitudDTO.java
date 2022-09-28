@@ -1,5 +1,6 @@
 package com.devforce.devForce.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Getter
@@ -19,5 +20,4 @@ public class SolicitudDTO {
     private int apruebaAdminID;
     private int tiempoSolicitado;
     private UsuarioDTO usuarioDTO;
-    private LicenciaDTO licenciaDTO;
 }

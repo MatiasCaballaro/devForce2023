@@ -1,5 +1,6 @@
 package com.devforce.devForce.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "phone")
+@ToString(exclude = {"phone","solicitudes"})
 @Entity
 @Table(name = "usuario")
 public class Usuario {
@@ -45,6 +46,8 @@ public class Usuario {
     @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
     private List<Solicitud> solicitudes;
 
+    @JsonIgnore
+    public List<Solicitud> getSolicitudes() {return solicitudes;}
     // TODO Hacer los roles
 
 }

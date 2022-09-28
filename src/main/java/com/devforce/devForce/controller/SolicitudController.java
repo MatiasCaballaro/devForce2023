@@ -53,6 +53,6 @@ public class SolicitudController {
     }
     @GetMapping("/test/solicitudesDTO")
     public List<SolicitudDTO> testSolicitudesDTO() {
-        return null;
+        return solicitudService.testSolicitudesDTO();
     }
 }

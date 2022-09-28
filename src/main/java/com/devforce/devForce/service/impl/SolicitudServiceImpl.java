@@ -20,6 +20,8 @@ public class SolicitudServiceImpl implements SolicitudService {
 
     @Autowired
     SolicitudRepository solicitudRepository;
+    @Autowired
+    UsuarioServiceImpl usuarioServiceImpl;
 
     @Override
     public Solicitud crearSolicitud(Solicitud solicitud, Usuario usuario) {
@@ -43,6 +45,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     public SolicitudDTO crearSolicitudDTO(Solicitud solicitud) {
 
         SolicitudDTO solicitudDTO = new SolicitudDTO();
+        solicitudDTO.setId(solicitud.getId());
         solicitudDTO.setTipo(solicitud.getTipo());
         solicitudDTO.setDescripcion(solicitud.getDescripcion());
         solicitudDTO.setApruebaMentorID(solicitud.getApruebaMentorID());
@@ -51,6 +54,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         solicitudDTO.setArea(solicitud.getArea());
         solicitudDTO.setLink(solicitud.getLink());
         solicitudDTO.setTiempoSolicitado(solicitud.getTiempoSolicitado());
+        solicitudDTO.setUsuarioDTO(usuarioServiceImpl.crearUsuarioDTO(solicitud.getUsuario()));
 
         return solicitudDTO;
     }
@@ -81,7 +85,7 @@ public class SolicitudServiceImpl implements SolicitudService {
             {
                 //MISSING DATA
             }
-            if(solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRAS-PLATAFORMAS"))//TODO: CAMBIAR OTRAS PLATAFORMAS POR LA QUE VAYA
+            if(solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA PLATAFORMA"))//TODO: CAMBIAR OTRAS PLATAFORMAS POR LA QUE VAYA
             {
                 if(solicitud.getLink().isEmpty())
                 {

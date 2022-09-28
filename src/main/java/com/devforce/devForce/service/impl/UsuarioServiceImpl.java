@@ -1,6 +1,7 @@
 package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.RespuestaDTO;
+import com.devforce.devForce.model.dto.UsuarioDTO;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.UsuarioRepository;
 import com.devforce.devForce.service.UsuarioService;
@@ -29,6 +30,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         RespuestaDTO respuestaDTO = new RespuestaDTO(true,"Datos actualizados",usuario);
 
         return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
+    }
+
+    UsuarioDTO crearUsuarioDTO (Usuario usuario) {
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setNombre(usuario.getNombre());
+        usuarioDTO.setApellido(usuario.getApellido());
+        usuarioDTO.setUsername(usuario.getUsername());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setPhone(usuario.getPhone());
+        usuarioDTO.setHasTeams(usuario.getHasTeams());
+        usuarioDTO.setMentorArea(usuario.getMentorArea());
+
+        return usuarioDTO;
     }
 
 }
