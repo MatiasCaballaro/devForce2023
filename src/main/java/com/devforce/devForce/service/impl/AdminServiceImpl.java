@@ -2,6 +2,7 @@ package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
+import com.devforce.devForce.model.dto.SolicitudDTO;
 import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
@@ -25,6 +26,9 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    SolicitudServiceImpl solicitudService;
+
     @Override
     public List<Licencia> getLicencias() {
         return licenciaRepository.findAll();
@@ -38,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
 
     private LicenciaDTO createLicenciaDTO(Licencia licencia) {
         LicenciaDTO licenciaDTO = new LicenciaDTO(licencia.getId(), licencia.getSerie(), licencia.getEstado(),
-                licencia.getVencimiento(), licencia.getPlataforma(), licencia.getSolicitudes());
+                licencia.getVencimiento(), licencia.getPlataforma(), licencia.getSolicitudes().stream().map(solicitud -> solicitudService.crearSolicitudDTO(solicitud)).collect(Collectors.toList()));
         return licenciaDTO;
     }
     @Override

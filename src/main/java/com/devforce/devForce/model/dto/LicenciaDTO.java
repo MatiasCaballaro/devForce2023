@@ -18,6 +18,6 @@ public class LicenciaDTO {
     private String estado;
     private LocalDate vencimiento;
     private String plataforma;
-    private List<Solicitud> solicitudes;
+    private List<SolicitudDTO> solicitudes;
 
 }

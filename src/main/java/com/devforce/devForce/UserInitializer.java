@@ -30,7 +30,7 @@ public class UserInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if(datosDePrueba){
+        if (datosDePrueba) {
 
             // TODO faltan las relaciones. Actualizar una vez hechas las mismas para generar los objetos correctos.
 
@@ -38,49 +38,36 @@ public class UserInitializer implements CommandLineRunner {
 
             System.out.println("------------ USUARIOS -------------");
 
-            for(int i = 1; i < 11; i++) {
+            for (int i = 1; i < 11; i++) {
                 Usuario user = new Usuario();
                 user.setId(i);
                 user.setNombre(faker.name().firstName());
                 user.setApellido(faker.name().lastName());
                 user.setUsername(user.getNombre() + user.getApellido());
                 user.setEmail(user.getNombre() + user.getApellido() + "@gire.com");
-                user.setPassword(user.getNombre()+"123");
+                user.setPassword(user.getNombre() + "123");
                 user.setPhone(faker.phoneNumber().cellPhone());
                 user.setHasTeams(faker.random().nextBoolean());
                 System.out.println(user);
                 usuarioRepository.save(user);
             }
 
-            // TODO Generar usuarios tipo Mentor y Admin
-            /*Usuario usuarioPrueba = new Usuario();
-            usuarioPrueba.setId(1);
-            usuarioPrueba.setNombre("Pirulo");
-            usuarioPrueba.setApellido("Rivarola");
-            usuarioPrueba.setUsername("PiruloRivarola");
-            usuarioPrueba.setEmail(usuarioPrueba.getNombre() + usuarioPrueba.getApellido() + "@gire.com");
-            usuarioPrueba.setPassword("Pirulo123");
-            usuarioPrueba.setPhone("0303456");
-            usuarioPrueba.setHasTeams(true);
-            System.out.println(usuarioPrueba);
-            usuarioRepository.save(usuarioPrueba);*/
-
             System.out.println("------------ SOLICITUDES -------------");
 
-            for(int i = 1; i < 11; i++) {
+            for (int i = 1; i < 11; i++) {
                 Solicitud solicitud = new Solicitud();
                 solicitud.setId(i);
                 solicitud.setTipo("UDEMY");
                 solicitud.setDescripcion(faker.chuckNorris().fact());
                 solicitud.setEstado("PENDIENTE-MENTOR");
                 solicitud.setArea("BACKEND");
+                solicitud.setUsuario(usuarioRepository.findById(1l));
                 System.out.println(solicitud);
                 solicitudRepository.save(solicitud);
             }
 
-
             System.out.println("------------ LICENCIAS -------------");
-            for(int i = 1; i < 11; i++) {
+            for (int i = 1; i < 11; i++) {
                 Licencia licencia = new Licencia();
                 licencia.setId(i);
                 licencia.setSerie(faker.bothify("????##?###???###"));
@@ -90,8 +77,67 @@ public class UserInitializer implements CommandLineRunner {
                 licenciaRepository.save(licencia);
             }
 
+            //USUARIOS DE PRUEBA
+            //TEST USUARIO TIPO USER****************************************************************
+            Usuario userUser = new Usuario();
+            userUser.setId(11);
+            userUser.setNombre("Nicolas");
+            userUser.setApellido("Rivas");
+            userUser.setUsername("NicolasRivas");
+            userUser.setEmail((userUser.getNombre() + "." + userUser.getApellido() + "@gire.com").toLowerCase());
+            userUser.setPassword("111");
+            userUser.setPhone("123456789");
+            userUser.setHasTeams(true);
+            usuarioRepository.save(userUser);
+            System.out.println(userUser.toString());
+            //****************************************************************************************
+
+            //TEST USUARIO TIPO MENTOR****************************************************************
+            Usuario userMentor = new Usuario();
+            userMentor.setId(12);
+            userMentor.setNombre("Matias");
+            userMentor.setApellido("Marchesi");
+            userMentor.setUsername("MatiMarchesi");
+            userMentor.setEmail((userMentor.getNombre() + "." + userMentor.getApellido() + "@gire.com").toLowerCase());
+            userMentor.setPassword("111");
+            userMentor.setPhone("123456789");
+            userMentor.setHasTeams(true);
+            usuarioRepository.save(userMentor);
+            System.out.println(userMentor.toString());
+            //****************************************************************************************
+
+            //TEST USUARIO TIPO ADMIN****************************************************************
+            Usuario userAdmin = new Usuario();
+            userAdmin.setId(13);
+            userAdmin.setNombre("Adrian");
+            userAdmin.setApellido("Pierro");
+            userAdmin.setUsername("AdrianPierro");
+            userAdmin.setEmail((userAdmin.getNombre() + "." + userAdmin.getApellido() + "@gire.com").toLowerCase());
+            userAdmin.setPassword("111");
+            userAdmin.setPhone("123456789");
+            userAdmin.setHasTeams(true);
+            usuarioRepository.save(userAdmin);
+            System.out.println(userUser.toString());
+            //****************************************************************************************
+
+            Solicitud solicitud1 = new Solicitud();
+            solicitud1.setId(11);
+            solicitud1.setTipo("UDEMY");
+            solicitud1.setDescripcion("HOLA");
+            solicitud1.setArea("BACKEND");
+            solicitud1.setUsuario(userUser);
+            solicitudRepository.save(solicitud1);
+            System.out.println(solicitud1.toString());
+
+            Solicitud solicitud2 = new Solicitud();
+            solicitud2.setId(12);
+            solicitud2.setTipo("UDEMY");
+            solicitud2.setDescripcion("HOLA");
+            solicitud2.setArea("BACKEND");
+            solicitud2.setUsuario(userMentor);
+            solicitudRepository.save(solicitud2);
+            System.out.println(solicitud2.toString());
 
         }
     }
 }
-

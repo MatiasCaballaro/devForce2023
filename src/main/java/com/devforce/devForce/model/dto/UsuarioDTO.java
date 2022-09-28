@@ -2,6 +2,7 @@ package com.devforce.devForce.model.dto;
 
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class UsuarioDTO {
     private String phone;
     private Boolean hasTeams;
     private String mentorArea;
-    private List<SolicitudDTO> solicitudes;
+
     //TODO: AGREGAR ROLES
 
     //Constructor
