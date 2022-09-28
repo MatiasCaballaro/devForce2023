@@ -125,6 +125,7 @@ public class UserInitializer implements CommandLineRunner {
             solicitud1.setTipo("UDEMY");
             solicitud1.setDescripcion("HOLA");
             solicitud1.setArea("BACKEND");
+            solicitud1.setEstado("PENDIENTE-MENTOR");
             solicitud1.setUsuario(userUser);
             solicitudRepository.save(solicitud1);
             System.out.println(solicitud1.toString());
@@ -134,10 +135,10 @@ public class UserInitializer implements CommandLineRunner {
             solicitud2.setTipo("UDEMY");
             solicitud2.setDescripcion("HOLA");
             solicitud2.setArea("BACKEND");
+            solicitud2.setEstado("PENDIENTE-MENTOR");
             solicitud2.setUsuario(userMentor);
             solicitudRepository.save(solicitud2);
             System.out.println(solicitud2.toString());
-
         }
     }
 }
