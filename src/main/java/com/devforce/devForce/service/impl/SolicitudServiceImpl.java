@@ -7,6 +7,7 @@ import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.SolicitudRepository;
 import com.devforce.devForce.service.SolicitudService;
+import com.devforce.devForce.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     @Autowired
     SolicitudRepository solicitudRepository;
     @Autowired
-    UsuarioServiceImpl usuarioServiceImpl;
+    UsuarioService usuarioService;
 
     @Override
     public Solicitud crearSolicitud(Solicitud solicitud, Usuario usuario) {
@@ -54,7 +55,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         solicitudDTO.setArea(solicitud.getArea());
         solicitudDTO.setLink(solicitud.getLink());
         solicitudDTO.setTiempoSolicitado(solicitud.getTiempoSolicitado());
-        solicitudDTO.setUsuarioDTO(usuarioServiceImpl.crearUsuarioDTO(solicitud.getUsuario()));
+        solicitudDTO.setUsuarioDTO(usuarioService.crearUsuarioDTO(solicitud.getUsuario()));
 
         return solicitudDTO;
     }

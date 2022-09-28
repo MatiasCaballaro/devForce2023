@@ -2,7 +2,6 @@ package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
-import com.devforce.devForce.model.dto.SolicitudDTO;
 import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
@@ -95,12 +94,12 @@ public class AdminServiceImpl implements AdminService {
 
         RespuestaDTO respuestaDTO;
 
-        if (licenciaRepository.findByTipoAndEstado(solicitud.getTipo(),"DISPONIBLE").size() == 0) {
+        if (licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(),"DISPONIBLE").size() == 0) {
             respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. No hay licencias disponibles por el momento.", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
 
-        Licencia licencia = licenciaRepository.findByTipoAndEstado(solicitud.getTipo(),"DISPONIBLE").get(1);
+        Licencia licencia = licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(),"DISPONIBLE").get(1);
         licencia.setVencimiento(LocalDate.now().plusDays(solicitud.getTiempoSolicitado()));
         solicitud.setLicencia(licencia);
         licencia.setEstado("ASIGNADA");
