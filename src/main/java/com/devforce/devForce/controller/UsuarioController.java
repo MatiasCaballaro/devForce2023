@@ -20,7 +20,7 @@ public class UsuarioController {
 
     @PutMapping("/updatedatos")
     public ResponseEntity<Object> updateDatos(@RequestBody Usuario usuario) {
-        return usuarioServiceImpl.actualizarDatos(usuario);
+        return usuarioServiceImpl.updateDatos(usuario);
     }
 
     @GetMapping("/test/usuariosDTO")

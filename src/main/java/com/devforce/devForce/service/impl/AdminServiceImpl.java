@@ -2,6 +2,7 @@ package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
+import com.devforce.devForce.model.dto.authRequestDTO.RegistroDTO;
 import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
@@ -42,20 +43,21 @@ public class AdminServiceImpl implements AdminService {
         return licenciaDTO;
     }
     @Override
-    public ResponseEntity<RespuestaDTO> crearUsuario(Usuario usuario) {
+    public ResponseEntity<RespuestaDTO> crearUsuario(RegistroDTO registroDTO) {
 
         // TODO FALTA SECURITY SERVICE
 
         RespuestaDTO respuestaDTO;
-        if (usuarioRepository.findByUsername(usuario.getUsername()) != null) {
+        if (usuarioRepository.findByUsername(registroDTO.getUsername()) != null) {
 
             respuestaDTO = new RespuestaDTO(false, "El usuario ya existe", null);
             return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
 
         }
-        usuarioRepository.save(usuario);
+        //usuarioRepository.save(usuario);
 
-        respuestaDTO = new RespuestaDTO(true, "El usuario ha sido creado correctamente", usuario);
+        //respuestaDTO = new RespuestaDTO(true, "El usuario ha sido creado correctamente", usuario);
+        respuestaDTO = new RespuestaDTO(true, "ok", null);
         return new ResponseEntity<>(respuestaDTO, HttpStatus.CREATED);
     }
 

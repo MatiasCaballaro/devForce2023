@@ -1,21 +1,28 @@
 package com.devforce.devForce.controller;
 import com.devforce.devForce.model.dto.SolicitudDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.devforce.devForce.model.entity.Licencia;
+import com.devforce.devForce.repository.LicenciaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+@RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+
+
+    @Autowired
+    LicenciaRepository licenciaRepository;
+
 //    @PostMapping("/registrarUsuario")
 //    @PostMapping("/asignarLicencia")
     @GetMapping("/licencias")
-    public List<SolicitudDTO> obtenerLicencias (@RequestParam long id){
+    public List<Licencia> obtenerLicencias (){
         //TODO: Cambiar requestParam por el authentication y cambiar el return por un servicio.
+        return licenciaRepository.findAll().stream().collect(Collectors.toList());
         //return usuarioRepository.findById(id).getSolicitudes().stream().map(SolicitudDTO::new).collect(Collectors.toList());
-        return null;
+
     }
 }

@@ -1,9 +1,12 @@
 package com.devforce.devForce.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,9 +45,29 @@ public class Usuario {
     @Column(name ="mentorArea", length = 25)
     private String mentorArea;
 
+    @JsonIgnore
     @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
     private List<Solicitud> solicitudes;
 
-    // TODO Hacer los roles
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                //", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
+                //", phone='" + phone + '\'' +
+                //", hasTeams=" + hasTeams +
+                //", solicitudes=" + solicitudes.stream().map(s -> s.getSolicitudId()).collect(Collectors.toList()) +
+                '}';
+    }
 }

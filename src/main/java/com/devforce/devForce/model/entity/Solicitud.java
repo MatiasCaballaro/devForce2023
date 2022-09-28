@@ -43,6 +43,7 @@ public class Solicitud {
 
 
     //Relación con usuario
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="usuario_id")
     private Usuario usuario;
