@@ -7,8 +7,11 @@ import com.devforce.devForce.repository.SolicitudRepository;
 import com.devforce.devForce.repository.UsuarioRepository;
 import com.devforce.devForce.service.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,26 +28,29 @@ public class SolicitudController {
     SolicitudService solicitudService;
 
     @GetMapping("/solicitudesusuario")
-    public List<SolicitudDTO> solicitudesUsuario (@RequestBody Usuario usuario){
-        //TODO: Cambiar requestBody por el authentication
-        return solicitudService.getSolicitudesUsuario(usuario);
+    @PreAuthorize("hasRole('USUARIO')")
+    public List<SolicitudDTO> solicitudesUsuario (){
+        return solicitudService.getSolicitudesUsuario();
     }
 
     @GetMapping("/solicitudesmentor")
-    public List<SolicitudDTO> solicitudesMentor (@RequestBody Usuario usuario){
-        //TODO: Cambiar requestBody por el authentication
-        return solicitudService.getSolicitudesMentor(usuario);
+    public List<SolicitudDTO> solicitudesMentor (){
+        return solicitudService.getSolicitudesMentor();
     }
 
     @GetMapping("/solicitudesadmin")
-    public List<SolicitudDTO> solicitudesAdmin (@RequestBody Usuario usuario){
-        //TODO: Cambiar requestBody por el authentication
-        return solicitudService.getSolicitudesAdmin(usuario);
+    public  List<SolicitudDTO> solicitudesAdmin (){
+        return solicitudService.getSolicitudesAdmin();
     }
 
     @PostMapping("/nuevaSolicitud")
-    public Solicitud crearSolicitud(Solicitud solicitud, Usuario usuario){
-        return solicitudService.crearSolicitud(solicitud, usuario);
+    public ResponseEntity<?> crearSolicitud(@Valid @RequestBody Solicitud solicitud){
+        return solicitudService.crearSolicitud(solicitud);
+    }
+
+    @PutMapping("/updateSolicitud")
+    public ResponseEntity<?> actualizarSolicitud(@Valid @RequestBody Solicitud solicitud){
+        return solicitudService.actualizarSolicitud(solicitud);
     }
 
     @GetMapping("/test/solicitudes")
