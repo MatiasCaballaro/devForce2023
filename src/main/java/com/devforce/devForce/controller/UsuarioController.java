@@ -3,6 +3,7 @@ import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.UsuarioDTO;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.UsuarioRepository;
+import com.devforce.devForce.service.UsuarioService;
 import com.devforce.devForce.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +16,14 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    UsuarioServiceImpl usuarioServiceImpl;
+    UsuarioService usuarioService;
 
     @Autowired
     UsuarioRepository usuarioRepository;
 
     @PutMapping("/updatedatos")
     public ResponseEntity<RespuestaDTO> updateDatos(@RequestBody Usuario usuario) {
-        return usuarioServiceImpl.actualizarDatos(usuario);
+        return usuarioService.actualizarDatos(usuario);
     }
 
     @GetMapping("/test/usuariosDTO")

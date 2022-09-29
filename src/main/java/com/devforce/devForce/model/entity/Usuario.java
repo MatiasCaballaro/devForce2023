@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,11 +45,37 @@ public class Usuario {
     @Column(name ="mentorArea", length = 25)
     private String mentorArea;
 
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
     private List<Solicitud> solicitudes;
 
     @JsonIgnore
     public List<Solicitud> getSolicitudes() {return solicitudes;}
-    // TODO Hacer los roles
 
+    public Usuario(String nombre, String apellido, String username, String email, String password, String phone, Boolean hasTeams, String mentorArea) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.hasTeams = hasTeams;
+        this.mentorArea = mentorArea;
+    }
+
+    public Usuario(String nombre, String apellido, String username, String email, String password, String phone, Boolean hasTeams, Set<Role> roles) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.hasTeams = hasTeams;
+        this.roles = roles;
+    }
 }

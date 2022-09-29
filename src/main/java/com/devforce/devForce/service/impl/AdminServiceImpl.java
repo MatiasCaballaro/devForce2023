@@ -2,7 +2,6 @@ package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
-import com.devforce.devForce.model.dto.SolicitudDTO;
 import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
