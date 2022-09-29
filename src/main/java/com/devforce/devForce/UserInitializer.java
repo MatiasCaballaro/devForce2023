@@ -70,6 +70,9 @@ public class UserInitializer implements CommandLineRunner {
             Role a = roleRepository.findByName(ERole.ROLE_ADMIN).orElse(null);
             adminRoles.add(a);
 
+
+            
+
             // TODO faltan las relaciones. Actualizar una vez hechas las mismas para generar los objetos correctos.
             log.info("Starting to initialize sample data...");
             Faker faker = new Faker();
@@ -91,6 +94,53 @@ public class UserInitializer implements CommandLineRunner {
                 usuarioRepository.save(user);
             }
 
+
+            //USUARIOS DE PRUEBA
+            //TEST USUARIO TIPO USER****************************************************************
+            Usuario userUser = new Usuario();
+            userUser.setId(11);
+            userUser.setNombre("Nicolas");
+            userUser.setApellido("Rivas");
+            userUser.setUsername(userUser.getNombre() + userUser.getApellido());
+            userUser.setEmail((userUser.getNombre() + "." + userUser.getApellido() + "@gire.com").toLowerCase());
+            userUser.setPassword(encoder.encode(userUser.getNombre()+"123"));
+            userUser.setPhone("123456789");
+            userUser.setHasTeams(true);
+            userUser.setRoles(userRoles);
+            usuarioRepository.save(userUser);
+            System.out.println(userUser.toString());
+            //****************************************************************************************
+
+            //TEST USUARIO TIPO MENTOR****************************************************************
+            Usuario userMentor = new Usuario();
+            userMentor.setId(12);
+            userMentor.setNombre("Javier");
+            userMentor.setApellido("Ottina");
+            userMentor.setUsername(userMentor.getNombre() + userMentor.getApellido());
+            userMentor.setEmail((userMentor.getNombre() + "." + userMentor.getApellido() + "@gire.com").toLowerCase());
+            userMentor.setPassword(encoder.encode(userMentor.getNombre()+"123"));
+            userMentor.setPhone("123456789");
+            userMentor.setHasTeams(true);
+            userMentor.setMentorArea("BACKEND");
+            userMentor.setRoles(mentorRoles);
+            usuarioRepository.save(userMentor);
+            System.out.println(userMentor.toString());
+
+            //TEST USUARIO TIPO ADMIN****************************************************************
+            Usuario userAdmin = new Usuario();
+            userAdmin.setId(13);
+            userAdmin.setNombre("Adrian");
+            userAdmin.setApellido("Pierro");
+            userAdmin.setUsername(userAdmin.getNombre() + userAdmin.getApellido());
+            userAdmin.setEmail((userAdmin.getNombre() + "." + userAdmin.getApellido() + "@gire.com").toLowerCase());
+            userAdmin.setPassword(encoder.encode(userAdmin.getNombre()+"123"));
+            userAdmin.setPhone("123456789");
+            userAdmin.setHasTeams(true);
+            userAdmin.setRoles(adminRoles);
+            usuarioRepository.save(userAdmin);
+            System.out.println(userUser.toString());
+            //****************************************************************************************
+
             System.out.println("------------ SOLICITUDES -------------");
 
             for (int i = 1; i < 11; i++) {
@@ -105,64 +155,7 @@ public class UserInitializer implements CommandLineRunner {
                 solicitudRepository.save(solicitud);
             }
 
-            System.out.println("------------ LICENCIAS -------------");
-            for (int i = 1; i < 11; i++) {
-                Licencia licencia = new Licencia();
-                licencia.setId(i);
-                licencia.setSerie(faker.bothify("????##?###???###"));
-                licencia.setEstado("DISPONIBLE");
-                licencia.setPlataforma("UDEMY");
-                licencia.setSolicitudes(new ArrayList<>());
-                System.out.println(licencia);
-                licenciaRepository.save(licencia);
-            }
 
-            //USUARIOS DE PRUEBA
-            //TEST USUARIO TIPO USER****************************************************************
-            Usuario userUser = new Usuario();
-            userUser.setId(11);
-            userUser.setNombre("Nicolas");
-            userUser.setApellido("Rivas");
-            userUser.setUsername("NicolasRivas");
-            userUser.setEmail((userUser.getNombre() + "." + userUser.getApellido() + "@gire.com").toLowerCase());
-            userUser.setPassword(encoder.encode(userUser.getNombre()+"123"));
-            userUser.setPhone("123456789");
-            userUser.setHasTeams(true);
-            userUser.setRoles(userRoles);
-            usuarioRepository.save(userUser);
-            System.out.println(userUser.toString());
-            //****************************************************************************************
-
-            //TEST USUARIO TIPO MENTOR****************************************************************
-            Usuario userMentor = new Usuario();
-            userMentor.setId(12);
-            userMentor.setNombre("Matias");
-            userMentor.setApellido("Marchesi");
-            userMentor.setUsername("MatiMarchesi");
-            userMentor.setEmail((userMentor.getNombre() + "." + userMentor.getApellido() + "@gire.com").toLowerCase());
-            userMentor.setPassword(encoder.encode(userUser.getNombre()+"123"));
-            userMentor.setPhone("123456789");
-            userMentor.setHasTeams(true);
-            userMentor.setMentorArea("BACKEND");
-            userMentor.setRoles(mentorRoles);
-            usuarioRepository.save(userMentor);
-            System.out.println(userMentor.toString());
-            //****************************************************************************************
-
-            //TEST USUARIO TIPO ADMIN****************************************************************
-            Usuario userAdmin = new Usuario();
-            userAdmin.setId(13);
-            userAdmin.setNombre("Adrian");
-            userAdmin.setApellido("Pierro");
-            userAdmin.setUsername("AdrianPierro");
-            userAdmin.setEmail((userAdmin.getNombre() + "." + userAdmin.getApellido() + "@gire.com").toLowerCase());
-            userAdmin.setPassword(encoder.encode(userUser.getNombre()+"123"));
-            userAdmin.setPhone("123456789");
-            userAdmin.setHasTeams(true);
-            userAdmin.setRoles(adminRoles);
-            usuarioRepository.save(userAdmin);
-            System.out.println(userUser.toString());
-            //****************************************************************************************
 
             //SOLICITUDES DE PRUEBA
             Solicitud solicitud1 = new Solicitud();
@@ -184,6 +177,22 @@ public class UserInitializer implements CommandLineRunner {
             solicitud2.setUsuario(userMentor);
             solicitudRepository.save(solicitud2);
             System.out.println(solicitud2.toString());
+
+            System.out.println("------------ LICENCIAS -------------");
+            for (int i = 1; i < 11; i++) {
+                Licencia licencia = new Licencia();
+                licencia.setId(i);
+                licencia.setSerie(faker.bothify("????##?###???###"));
+                licencia.setEstado("DISPONIBLE");
+                licencia.setPlataforma("UDEMY");
+                licencia.setSolicitudes(new ArrayList<>());
+                System.out.println(licencia);
+                licenciaRepository.save(licencia);
+            }
+
+
+
+
 
             //LICENCIA DE PRUEBA
             Licencia licenciaPrueba= licenciaRepository.findById(1L);
