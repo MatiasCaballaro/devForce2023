@@ -137,7 +137,7 @@ public class UserInitializer implements CommandLineRunner {
             userAdmin.setHasTeams(true);
             userAdmin.setRoles(adminRoles);
             usuarioRepository.save(userAdmin);
-            System.out.println(userUser.toString());
+            System.out.println(userAdmin.toString());
             //****************************************************************************************
 
             System.out.println("------------ SOLICITUDES -------------");

@@ -12,7 +12,7 @@ public class MentorController {
     @Autowired
     MentorServiceImpl mentorServiceImpl;
     @PutMapping("/aceptarSolicitud")
-    ResponseEntity<RespuestaDTO> aceptarSolicitud (@RequestParam Solicitud solicitud, @RequestParam Integer dias){
+    ResponseEntity<RespuestaDTO> aceptarSolicitud (@RequestBody Solicitud solicitud, @RequestParam Integer dias){
         return mentorServiceImpl.aceptarSolicitud(solicitud, dias);
     }
 
