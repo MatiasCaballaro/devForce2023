@@ -177,6 +177,7 @@ public class UserInitializer implements CommandLineRunner {
             solicitudRepository.save(solicitud2);
             System.out.println(solicitud2.toString());
 
+
             System.out.println("------------ LICENCIAS -------------");
             for (int i = 1; i < 11; i++) {
                 Licencia licencia = new Licencia();
@@ -188,15 +189,9 @@ public class UserInitializer implements CommandLineRunner {
                 System.out.println(licencia);
                 licenciaRepository.save(licencia);
             }
-
-
-
-
-
             //LICENCIA DE PRUEBA
             Licencia licenciaPrueba= licenciaRepository.findById(1L);
             System.out.println("licenciaPrueba = " + licenciaPrueba);
-
             log.info("Finished with data initialization");
 
         }

@@ -9,5 +9,4 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
 
     Licencia findById(long id);
     List<Licencia> findByPlataformaAndEstado(String plataforma, String estado);
-
 }
