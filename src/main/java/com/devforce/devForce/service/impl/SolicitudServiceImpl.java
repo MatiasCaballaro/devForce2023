@@ -1,14 +1,21 @@
 package com.devforce.devForce.service.impl;
 
 import com.devforce.devForce.model.dto.LicenciaDTO;
+import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.SolicitudDTO;
 import com.devforce.devForce.model.dto.UsuarioDTO;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.repository.SolicitudRepository;
+import com.devforce.devForce.repository.UsuarioRepository;
+import com.devforce.devForce.security.services.UserDetailsImpl;
 import com.devforce.devForce.service.SolicitudService;
 import com.devforce.devForce.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,22 +31,53 @@ public class SolicitudServiceImpl implements SolicitudService {
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @Override
-    public Solicitud crearSolicitud(Solicitud solicitud, Usuario usuario) {
-        //TODO: IMPLEMENTAR LAS VERIFICACIONES
-        //TODO: METER RESPONSE ENTITY
+    public ResponseEntity<?> crearSolicitud(Solicitud solicitud) {
+
+        UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
+        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+
+        if(solicitud.getTipo().isEmpty() || solicitud.getArea().isEmpty()  || solicitud.getDescripcion().isEmpty())
+        {
+            RespuestaDTO respuestaDTO = new RespuestaDTO();
+            respuestaDTO.setOk(false);
+            respuestaDTO.setMensaje("Faltan datos");
+            respuestaDTO.setContenido(null);
+
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+        }
+        if(solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA PLATAFORMA"))
+        {
+            if(solicitud.getLink() == null)
+            {
+                RespuestaDTO respuestaDTO = new RespuestaDTO();
+                respuestaDTO.setOk(false);
+                respuestaDTO.setMensaje("Para este tipo de solicitud es obligatorio adjuntar un link");
+                respuestaDTO.setContenido(null);
+
+                return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Solicitud solicitudNueva = new Solicitud();
         solicitudNueva.setTipo(solicitud.getTipo());
         solicitudNueva.setDescripcion(solicitud.getDescripcion());
         solicitudNueva.setArea(solicitud.getArea());
         solicitudNueva.setLink(solicitud.getLink());
-        solicitudNueva.setTiempoSolicitado(solicitud.getTiempoSolicitado());
-        //TODO: SETEAR EL ESTADO EN PENDIENTE MENTOR
+        solicitudNueva.setEstado("PENDIENTE-MENTOR");
         solicitudNueva.setUsuario(usuario);
 
         solicitudRepository.save(solicitudNueva);
-        return solicitudNueva;//TODO: CAMBIARLO POR UNA RESPUESTA
+
+        RespuestaDTO respuestaDTO = new RespuestaDTO();
+        respuestaDTO.setOk(true);
+        respuestaDTO.setMensaje("Solicitud Creada correctamente");
+        respuestaDTO.setContenido(solicitudNueva);
+
+        return new ResponseEntity<>(respuestaDTO, HttpStatus.CREATED);
     }
 
     @Override
@@ -61,55 +99,95 @@ public class SolicitudServiceImpl implements SolicitudService {
     }
 
     @Override
-    public List<SolicitudDTO> getSolicitudesUsuario(Usuario usuario) {
+    public List<SolicitudDTO> getSolicitudesUsuario() {
+        UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
+        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
         List<SolicitudDTO> solicitudes = usuario.getSolicitudes().stream().map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
 
     @Override
-    public List<SolicitudDTO> getSolicitudesMentor(Usuario usuario) {
+    public List<SolicitudDTO> getSolicitudesMentor() {
+        UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
+        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findByArea(usuario.getMentorArea()).stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario)).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
     @Override
-    public List<SolicitudDTO> getSolicitudesAdmin(Usuario usuario) {
+    public List<SolicitudDTO> getSolicitudesAdmin() {
+        UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
+        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario)).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
 
-    //TODO: TERMINAR SERVICIO ACTUALIZAR SOLICITUD
     @Override
-    public Solicitud actualizarSolicitud(Solicitud solicitud, Usuario usuario) {
+    public ResponseEntity<?> actualizarSolicitud(Solicitud solicitud) {
+
+        UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
+        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+
         if(solicitud.getEstado().equals("PENDIENTE-MENTOR") || solicitud.getEstado().equals("DEVUELTO-USER"))
         {
-            if(solicitud.getTipo().isEmpty() || solicitud.getDescripcion().isEmpty() || solicitud.getArea().isEmpty() || solicitud.getTiempoSolicitado() <=0)
+            if(solicitud.getTipo().isEmpty() || solicitud.getDescripcion().isEmpty() || solicitud.getArea().isEmpty())
             {
-                //MISSING DATA
+                RespuestaDTO respuestaDTO = new RespuestaDTO();
+                respuestaDTO.setOk(false);
+                respuestaDTO.setMensaje("Faltan datos");
+                respuestaDTO.setContenido(null);
+
+                return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
             }
-            if(solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA PLATAFORMA"))//TODO: CAMBIAR OTRAS PLATAFORMAS POR LA QUE VAYA
+            if(solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA PLATAFORMA"))
             {
                 if(solicitud.getLink().isEmpty())
                 {
-                    //TENES QUE PONER EL LINK
+                    RespuestaDTO respuestaDTO = new RespuestaDTO();
+                    respuestaDTO.setOk(false);
+                    respuestaDTO.setMensaje("Para este tipo de solicitud es obligatorio adjuntar un link");
+                    respuestaDTO.setContenido(null);
+
+                    return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
                 }
             }
-            //TODO: AGREGAR VERIFICACION DE QUE EL QUE HAGA LA PETICION SEA EL USUARIO QUE ESTA AUTENTICADO
 
             Solicitud solicitudAnterior = this.solicitudRepository.findById(solicitud.getId()).orElse(null);
+
+            if(!usuario.getSolicitudes().contains(solicitudAnterior))
+            {
+                RespuestaDTO respuestaDTO = new RespuestaDTO();
+                respuestaDTO.setOk(false);
+                respuestaDTO.setMensaje("La solicitud elegida no pertenece a esta cuenta");
+                respuestaDTO.setContenido(null);
+
+                return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+            }
 
             solicitudAnterior.setTipo(solicitud.getTipo());
             solicitudAnterior.setDescripcion(solicitud.getDescripcion());
             solicitudAnterior.setArea(solicitud.getArea());
             solicitudAnterior.setLink(solicitud.getLink());
-            solicitudAnterior.setTiempoSolicitado(solicitud.getTiempoSolicitado());
 
             solicitudRepository.save(solicitudAnterior);
         }
         else
         {
-            //LA SOLICITUD NO SE ENCUENTRA EN PENDIENTE MENTOR O DEVUELTO USER
+            RespuestaDTO respuestaDTO = new RespuestaDTO();
+            respuestaDTO.setOk(false);
+            respuestaDTO.setMensaje("La solicitud no se encuentra en un estado permitido para actualizar");
+            respuestaDTO.setContenido(null);
+
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         }
-        return null;//TODO: CAMBIARLO POR UNA RESPUESTA
+
+        RespuestaDTO respuestaDTO = new RespuestaDTO();
+        respuestaDTO.setOk(true);
+        respuestaDTO.setMensaje("Solicitud Actualizada");
+        respuestaDTO.setContenido(null);
+
+        return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
     }
 
     @Override
