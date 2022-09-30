@@ -2,6 +2,7 @@ package com.devforce.devForce.controller;
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.SolicitudDTO;
+import com.devforce.devForce.model.dto.authRequestDTO.RegistroDTO;
 import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
@@ -19,8 +20,8 @@ public class AdminController {
     @Autowired
     AdminServiceImpl adminServiceImpl;
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<RespuestaDTO> crearUsuario(@RequestBody Usuario usuario) {
-        return adminServiceImpl.crearUsuario(usuario);
+    public ResponseEntity<RespuestaDTO> crearUsuario(@RequestBody RegistroDTO registroDTO) {
+        return adminServiceImpl.crearUsuario(registroDTO);
     }
 
     @PostMapping("/asignarLicencia")

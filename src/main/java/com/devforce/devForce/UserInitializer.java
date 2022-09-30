@@ -149,6 +149,7 @@ public class UserInitializer implements CommandLineRunner {
                 solicitud.setDescripcion(faker.chuckNorris().fact());
                 solicitud.setEstado("PENDIENTE-MENTOR");
                 solicitud.setArea("BACKEND");
+                solicitud.setTiempoSolicitado(i);
                 solicitud.setUsuario(usuarioRepository.findById(1l));
                 System.out.println(solicitud);
                 solicitudRepository.save(solicitud);
