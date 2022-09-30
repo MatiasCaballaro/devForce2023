@@ -29,27 +29,27 @@ public class SolicitudController {
 
     @GetMapping("/solicitudesusuario")
     @PreAuthorize("hasRole('USUARIO')")
-    public List<SolicitudDTO> solicitudesUsuario (){
+    public List<SolicitudDTO> solicitudesUsuario() {
         return solicitudService.getSolicitudesUsuario();
     }
 
     @GetMapping("/solicitudesmentor")
-    public List<SolicitudDTO> solicitudesMentor (){
+    public List<SolicitudDTO> solicitudesMentor() {
         return solicitudService.getSolicitudesMentor();
     }
 
     @GetMapping("/solicitudesadmin")
-    public  List<SolicitudDTO> solicitudesAdmin (){
+    public List<SolicitudDTO> solicitudesAdmin() {
         return solicitudService.getSolicitudesAdmin();
     }
 
     @PostMapping("/nuevaSolicitud")
-    public ResponseEntity<?> crearSolicitud(@Valid @RequestBody Solicitud solicitud){
+    public ResponseEntity<?> crearSolicitud(@Valid @RequestBody Solicitud solicitud) {
         return solicitudService.crearSolicitud(solicitud);
     }
 
     @PutMapping("/updateSolicitud")
-    public ResponseEntity<?> actualizarSolicitud(@Valid @RequestBody Solicitud solicitud){
+    public ResponseEntity<?> actualizarSolicitud(@Valid @RequestBody Solicitud solicitud) {
         return solicitudService.actualizarSolicitud(solicitud);
     }
 
@@ -57,6 +57,7 @@ public class SolicitudController {
     public List<Solicitud> testSolicitudes() {
         return solicitudRepository.findAll();
     }
+
     @GetMapping("/test/solicitudesDTO")
     public List<SolicitudDTO> testSolicitudesDTO() {
         return solicitudService.testSolicitudesDTO();
