@@ -53,8 +53,8 @@ public class MentorServiceImpl implements MentorService {
             return respuestaDTO;
         }
 
-        if (solicitudUsuario.getUsuario().getId() != mentor.getId()) {
-            respuestaDTO.setMensaje("La solicitud no esta dirigida al mentor " + mentor.getUsername());
+        if (solicitudUsuario.getUsuario().getId() == mentor.getId()) {
+            respuestaDTO.setMensaje("La solicitud no puede estar dirigida al mentor " + mentor.getUsername() + "debido a que fue emitida por el mismo mentor.");
             respuestaDTO.setContenido(solicitud);
             return respuestaDTO;
         }
