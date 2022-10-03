@@ -61,15 +61,6 @@ public class SolicitudServiceImpl implements SolicitudService {
                 return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
             }
         }
-        if(solicitud.getArea().equalsIgnoreCase(usuario.getMentorArea()))
-        {
-            RespuestaDTO respuestaDTO = new RespuestaDTO();
-            respuestaDTO.setOk(false);
-            respuestaDTO.setMensaje("No puede elegir solicitudes de este area ");
-            respuestaDTO.setContenido(null);
-
-            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
-        }
 
         Solicitud solicitudNueva = new Solicitud();
         solicitudNueva.setTipo(solicitud.getTipo());
