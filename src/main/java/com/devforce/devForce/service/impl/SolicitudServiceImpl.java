@@ -18,10 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-
 
 @Service
 public class SolicitudServiceImpl implements SolicitudService {
@@ -38,7 +38,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     public ResponseEntity<?> crearSolicitud(Solicitud solicitud) {
 
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
-        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+        Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
         if(solicitud.getTipo().isEmpty() || solicitud.getArea().isEmpty()  || solicitud.getDescripcion().isEmpty())
         {
@@ -60,6 +60,15 @@ public class SolicitudServiceImpl implements SolicitudService {
 
                 return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
             }
+        }
+        if(solicitud.getArea().equalsIgnoreCase(usuario.getMentorArea()))
+        {
+            RespuestaDTO respuestaDTO = new RespuestaDTO();
+            respuestaDTO.setOk(false);
+            respuestaDTO.setMensaje("No puede elegir solicitudes de este area ");
+            respuestaDTO.setContenido(null);
+
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         }
 
         Solicitud solicitudNueva = new Solicitud();
@@ -101,7 +110,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     @Override
     public List<SolicitudDTO> getSolicitudesUsuario() {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
-        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+        Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
         List<SolicitudDTO> solicitudes = usuario.getSolicitudes().stream().map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
@@ -109,9 +118,9 @@ public class SolicitudServiceImpl implements SolicitudService {
     @Override
     public List<SolicitudDTO> getSolicitudesMentor() {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
-        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
-
-        List<SolicitudDTO> solicitudes = this.solicitudRepository.findByArea(usuario.getMentorArea()).stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario)).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
+        Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
+        List<SolicitudDTO> solicitudes = this.solicitudRepository.findByArea(usuario.getMentorArea()).stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario))
+                .filter(solicitud -> solicitud.getEstado().equalsIgnoreCase("PENDIENTE-MENTOR")).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
     @Override
@@ -119,7 +128,8 @@ public class SolicitudServiceImpl implements SolicitudService {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
         Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
 
-        List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario)).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
+        List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario))
+                .filter(solicitud -> solicitud.getEstado().equalsIgnoreCase("PENDIENTE-ADMIN")).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
 
@@ -169,6 +179,7 @@ public class SolicitudServiceImpl implements SolicitudService {
             solicitudAnterior.setDescripcion(solicitud.getDescripcion());
             solicitudAnterior.setArea(solicitud.getArea());
             solicitudAnterior.setLink(solicitud.getLink());
+            solicitudAnterior.setEstado("PENDIENTE-MENTOR");
 
             solicitudRepository.save(solicitudAnterior);
         }

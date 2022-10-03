@@ -34,21 +34,25 @@ public class SolicitudController {
     }
 
     @GetMapping("/solicitudesmentor")
+    @PreAuthorize("hasRole('MENTOR')")
     public List<SolicitudDTO> solicitudesMentor() {
         return solicitudService.getSolicitudesMentor();
     }
 
     @GetMapping("/solicitudesadmin")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<SolicitudDTO> solicitudesAdmin() {
         return solicitudService.getSolicitudesAdmin();
     }
 
     @PostMapping("/nuevaSolicitud")
+    @PreAuthorize("hasRole('USUARIO')")
     public ResponseEntity<?> crearSolicitud(@Valid @RequestBody Solicitud solicitud) {
         return solicitudService.crearSolicitud(solicitud);
     }
 
     @PutMapping("/updateSolicitud")
+    @PreAuthorize("hasRole('USUARIO')")
     public ResponseEntity<?> actualizarSolicitud(@Valid @RequestBody Solicitud solicitud) {
         return solicitudService.actualizarSolicitud(solicitud);
     }
