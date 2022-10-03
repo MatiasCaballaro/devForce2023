@@ -126,7 +126,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     @Override
     public List<SolicitudDTO> getSolicitudesAdmin() {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
-        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+        Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario))
                 .filter(solicitud -> solicitud.getEstado().equalsIgnoreCase("PENDIENTE-ADMIN")).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
@@ -137,7 +137,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     public ResponseEntity<?> actualizarSolicitud(Solicitud solicitud) {
 
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
-        Usuario usuario = usuarioRepository.findById(usuarioAutenticado.getId()).orElse(null);
+        Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
         if(solicitud.getEstado().equals("PENDIENTE-MENTOR") || solicitud.getEstado().equals("DEVUELTO-USER"))
         {
