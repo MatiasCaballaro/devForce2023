@@ -67,7 +67,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioDTO.setPhone(usuario.getPhone());
         usuarioDTO.setHasTeams(usuario.getHasTeams());
         usuarioDTO.setMentorArea(usuario.getMentorArea());
-
+        usuarioDTO.setRoles(usuario.getRoles());
         return usuarioDTO;
     }
 
