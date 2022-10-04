@@ -1,5 +1,6 @@
 package com.devforce.devForce.model.dto;
 
+import com.devforce.devForce.model.entity.Role;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -26,7 +28,7 @@ public class UsuarioDTO {
     private String phone;
     private Boolean hasTeams;
     private String mentorArea;
-
+    private Set<Role> roles;
     //TODO: AGREGAR ROLES
 
     //Constructor
