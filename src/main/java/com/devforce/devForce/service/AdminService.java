@@ -16,6 +16,9 @@ public interface AdminService {
     public List<LicenciaDTO> getLicenciasDTOasignadas();
     public List<LicenciaDTO> getLicenciasDTOdisponibles();
     public List<Licencia> getLicencias();
+    public ResponseEntity<RespuestaDTO> reservarLicencia(Licencia licencia);
+    public ResponseEntity<RespuestaDTO> rechazarSolicitudes(Solicitud solicitud);
+    public ResponseEntity<RespuestaDTO> revocarLicencia(Licencia licencia);
     public ResponseEntity<RespuestaDTO> crearUsuario(RegistroDTO registroDTO);
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud);
 }

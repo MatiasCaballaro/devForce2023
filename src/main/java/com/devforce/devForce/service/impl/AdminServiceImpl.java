@@ -178,6 +178,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+
     private  ResponseEntity<RespuestaDTO> asignarNuevaLicencia(Solicitud solicitud){
         UserDetailsImpl adminAutenticado = usuarioService.obtenerUsuario();
 
@@ -227,6 +228,51 @@ public class AdminServiceImpl implements AdminService {
             respuestaDTO = new RespuestaDTO(true, "lICENCIA RENOVADA", solicitud.getLicencia().getId());
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.ACCEPTED);
         }
+    }
+    @Override
+    public ResponseEntity<RespuestaDTO> rechazarSolicitudes(Solicitud solicitud){
+        UserDetailsImpl adminAutenticado = usuarioService.obtenerUsuario();
+        RespuestaDTO respuestaDTO;
+
+        if(solicitud.getEstado() != "PENDIENTE-ADMIN" || solicitud.getApruebaMentorID() == 0){
+            respuestaDTO = new RespuestaDTO(false, "La solicitud todavia no fue aprobada por el mentor", null);
+            return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
+        }
+
+        solicitud.setEstado("DENEGADA");
+        solicitud.setApruebaAdminID(adminAutenticado.getId().intValue());
+        solicitudRepository.save(solicitud);
+        respuestaDTO = new RespuestaDTO(true, "La Solicitud se rechazo correctamente", null);
+        return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<RespuestaDTO> reservarLicencia(Licencia licencia){
+        RespuestaDTO respuestaDTO;
+
+    if(!licencia.getEstado().equals("DISPONIBLE")){
+        respuestaDTO = new RespuestaDTO(false, "La licencia no se encuentra disponible para reservar", null);
+        return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
+    }
+
+    licencia.setEstado("RESERVADA");
+    licenciaRepository.save(licencia);
+    respuestaDTO = new RespuestaDTO(true, "La licencia se reservo correctamente", null);
+    return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
+    }
+    @Override
+    public ResponseEntity<RespuestaDTO> revocarLicencia(Licencia licencia){
+        RespuestaDTO respuestaDTO;
+
+        if(licencia.getEstado().equals("DISPONIBLE")){
+            respuestaDTO = new RespuestaDTO(false, "La licencia no esta asignada", null);
+            return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
+        }
+
+        licencia.setEstado("DISPONIBLE");
+        licenciaRepository.save(licencia);
+        respuestaDTO = new RespuestaDTO(true, "La licencia " + licencia.getSerie() + " fue revocada perfectamente", null);
+        return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
     }
 }
 
