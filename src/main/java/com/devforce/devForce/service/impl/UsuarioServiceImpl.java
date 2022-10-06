@@ -38,19 +38,38 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     JwtUtils jwtUtils;
+
     @Override
     public ResponseEntity<RespuestaDTO> actualizarDatos(Usuario usuario) {
 
-        Usuario usuarioSeleccionado = usuarioRepository.findByNombreAndApellido(usuario.getNombre(), usuario.getApellido());
+        UserDetailsImpl usuarioAutenticado = obtenerUsuario();
+        Usuario usuarioLogueado = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
-        usuarioSeleccionado.setEmail(usuario.getEmail());
-        usuarioSeleccionado.setPassword(usuario.getPassword());
-        usuarioSeleccionado.setPhone(usuario.getPhone());
-        usuarioSeleccionado.setHasTeams(usuario.getHasTeams());
-        usuarioSeleccionado.setMentorArea(usuario.getMentorArea());
-        usuarioRepository.save(usuarioSeleccionado);
 
-        RespuestaDTO respuestaDTO = new RespuestaDTO(true,"Datos actualizados",usuario);
+        usuarioLogueado.setPassword(encoder.encode(usuario.getPassword()));
+        usuarioLogueado.setPhone(usuario.getPhone());
+        usuarioLogueado.setHasTeams(usuario.getHasTeams());
+
+        if(usuarioLogueado.getMentorArea()!=null)
+        {
+            usuarioLogueado.setMentorArea(usuario.getMentorArea());
+        }
+        if(usuarioRepository.existsByEmail(usuario.getEmail()))
+        {
+            if(!usuarioLogueado.getEmail().equals(usuario.getEmail()))
+            {RespuestaDTO respuestaDTO = new RespuestaDTO();
+                respuestaDTO.setOk(false);
+                respuestaDTO.setMensaje("Ese email ya se encuentra registrado");
+                respuestaDTO.setContenido(null);
+
+                return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        usuarioLogueado.setEmail(usuario.getEmail());
+        usuarioRepository.save(usuarioLogueado);
+
+        RespuestaDTO respuestaDTO = new RespuestaDTO(true,"Datos actualizados",usuarioLogueado);
 
         return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
     }
@@ -69,6 +88,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioDTO.setMentorArea(usuario.getMentorArea());
         usuarioDTO.setRoles(usuario.getRoles());
         return usuarioDTO;
+    }
+
+    public List<UsuarioDTO> getUsuariosDTOs(){
+        List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream().map(usuario -> crearUsuarioDTO(usuario)).collect(Collectors.toList());
+        return usuarios;
     }
 
     @Override
