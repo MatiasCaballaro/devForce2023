@@ -37,8 +37,8 @@ public class AuthController {
 
   @PostMapping("/signup")
   @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RespuestaDTO> registerUser(@Valid @RequestBody Usuario usuario) {
-    return adminService.crearUsuario(usuario);
+    public ResponseEntity<RespuestaDTO> registerUser(@Valid @RequestBody RegistroDTO registroDTO) {
+    return adminService.crearUsuario(registroDTO);
   }
 
   @PostMapping("/signout")
