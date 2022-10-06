@@ -189,7 +189,7 @@ public class AdminServiceImpl implements AdminService {
         } else {
 
             Licencia licencia = licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(), "DISPONIBLE").get(1);
-            licencia.setVencimiento(LocalDate.now().plusDays(/*solicitud.getTiempoSolicitado()*/1));
+            licencia.setVencimiento(LocalDate.now().plusDays(solicitud.getTiempoSolicitado()));
             solicitud.setLicencia(licencia);
             licencia.setEstado("ASIGNADA");
             solicitud.setApruebaAdminID(adminAutenticado.getId().intValue());
