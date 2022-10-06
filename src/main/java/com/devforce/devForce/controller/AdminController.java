@@ -1,4 +1,4 @@
-package com.devforce.devForce.model.controller;
+package com.devforce.devForce.controller;
 import com.devforce.devForce.model.dto.LicenciaDTO;
 import com.devforce.devForce.model.dto.RespuestaDTO;
 import com.devforce.devForce.model.dto.SolicitudDTO;
