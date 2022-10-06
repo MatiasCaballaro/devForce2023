@@ -7,10 +7,15 @@ import com.devforce.devForce.model.entity.Licencia;
 import com.devforce.devForce.model.entity.Role;
 import com.devforce.devForce.model.entity.Solicitud;
 import com.devforce.devForce.model.entity.Usuario;
+import com.devforce.devForce.model.enums.ERole;
 import com.devforce.devForce.repository.LicenciaRepository;
+import com.devforce.devForce.repository.RoleRepository;
 import com.devforce.devForce.repository.SolicitudRepository;
 import com.devforce.devForce.repository.UsuarioRepository;
+import com.devforce.devForce.security.jwtUtils.JwtUtils;
+import com.devforce.devForce.security.services.UserDetailsImpl;
 import com.devforce.devForce.service.AdminService;
+import com.devforce.devForce.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +46,12 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    UsuarioService usuarioService;
+
     @Override
     public List<Licencia> getLicencias() {
         return licenciaRepository.findAll();
@@ -51,6 +62,16 @@ public class AdminServiceImpl implements AdminService {
         return licenciaRepository.findAll().stream().map(licencia -> createLicenciaDTO(licencia)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<LicenciaDTO> getLicenciasDTOasignadas(){
+     return  licenciaRepository.findByEstado("ASIGNADA").stream().map(licencia -> createLicenciaDTO(licencia)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LicenciaDTO> getLicenciasDTOdisponibles(){
+        return  licenciaRepository.findByEstado("DISPONIBLE").stream().map(licencia -> createLicenciaDTO(licencia)).collect(Collectors.toList());
+    }
+
 
     private LicenciaDTO createLicenciaDTO(Licencia licencia) {
         LicenciaDTO licenciaDTO = new LicenciaDTO(licencia.getId(), licencia.getSerie(), licencia.getEstado(),
@@ -58,13 +79,12 @@ public class AdminServiceImpl implements AdminService {
                 .map(solicitud -> solicitudService.crearSolicitudDTO(solicitud)).collect(Collectors.toList()));
         return licenciaDTO;
     }
+
     @Override
     public ResponseEntity<RespuestaDTO> crearUsuario(RegistroDTO registroDTO) {
 
-        // TODO FALTA SECURITY SERVICE
-
         RespuestaDTO respuestaDTO;
-        if (usuarioRepository.findByUsername(registroDTO.getUsername()) != null)
+        if (usuarioRepository.findByUsername(registroDTO.getUsername()).orElse(null) != null)
         {
             respuestaDTO = new RespuestaDTO(false, "El usuario ya existe", null);
             return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
@@ -83,18 +103,57 @@ public class AdminServiceImpl implements AdminService {
         Set<String> rolesUsuarioString = registroDTO.getRole();
         Set<Role> rolesUsuario = new HashSet<>();
 
-        usuarioRepository.save(usuario);
+        if(rolesUsuarioString.isEmpty()){
+            Role userRoleMentor = roleRepository.findByName(ERole.ROLE_USUARIO).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            rolesUsuario.add(userRoleMentor);
+        } else {
 
+            if(rolesUsuarioString.contains("mentor")) {
+                if (registroDTO.getMentorArea() == null) {
+                    respuestaDTO = new RespuestaDTO(false, "Falta completar el area del mentor", null);
+                    return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
+                }
+            }
+
+            rolesUsuarioString.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        rolesUsuario.add(adminRole);
+                        break;
+                    case "mentor":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MENTOR).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        rolesUsuario.add(modRole);
+                        Role userRoleMentor = roleRepository.findByName(ERole.ROLE_USUARIO).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        rolesUsuario.add(userRoleMentor);
+                        break;
+                    case "usuario":
+                        Role defaultRole = roleRepository.findByName(ERole.ROLE_USUARIO).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        rolesUsuario.add(defaultRole);
+                }
+            });
+
+            if(rolesUsuario.isEmpty()){
+                respuestaDTO = new RespuestaDTO(false, "No se ingreso ningun rol valido.", null);
+                return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
+            }
+        }
+        usuario.setRoles(rolesUsuario);
+        usuarioRepository.save(usuario);
         respuestaDTO = new RespuestaDTO(true, "El usuario ha sido creado correctamente", usuario);
         return new ResponseEntity<>(respuestaDTO, HttpStatus.CREATED);
     }
+
+
+
+
 
     //Prueba
     @Override
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud) {
         RespuestaDTO respuestaDTO;
 
-        if (solicitud.getEstado().equals("PENDIENTE-MENTOR") == false) {
+        if (solicitud.getEstado().equals("PENDIENTE-ADMIN") == false) {
             respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. No fue aprobada", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
@@ -108,19 +167,19 @@ public class AdminServiceImpl implements AdminService {
          */
 
 
-        int solicitudesSimilares = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitud.getUsuario(), solicitud.getTipo(), "ACEPTADA").size();
+        int solicitudesSimilares = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitud.getUsuario(), solicitud.getTipo(), "ACEPTADO").size();
 
         if ( solicitudesSimilares == 0) {
             return asignarNuevaLicencia(solicitud);
         } else {
             List<Solicitud> solicitudesSimilaresAceptadas = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitud.getUsuario(),
-                    solicitud.getTipo(), "ACEPTADA");
-            int prueba = 1;
+                    solicitud.getTipo(), "ACEPTADO");
             return renovarLicencia(solicitud, solicitudesSimilaresAceptadas.get(0));
         }
     }
 
     private  ResponseEntity<RespuestaDTO> asignarNuevaLicencia(Solicitud solicitud){
+        UserDetailsImpl adminAutenticado = usuarioService.obtenerUsuario();
 
         RespuestaDTO respuestaDTO;
 
@@ -133,7 +192,8 @@ public class AdminServiceImpl implements AdminService {
             licencia.setVencimiento(LocalDate.now().plusDays(/*solicitud.getTiempoSolicitado()*/1));
             solicitud.setLicencia(licencia);
             licencia.setEstado("ASIGNADA");
-            solicitud.setEstado("ACEPTADA");
+            solicitud.setApruebaAdminID(adminAutenticado.getId().intValue());
+            solicitud.setEstado("ACEPTADO");
             solicitudRepository.save(solicitud);
             licenciaRepository.save(licencia);
 
@@ -149,6 +209,7 @@ public class AdminServiceImpl implements AdminService {
             return asignarNuevaLicencia(solicitud);
         } else {
 
+            UserDetailsImpl adminAutenticado = usuarioService.obtenerUsuario();
             if(solicitud.getTiempoSolicitado() == 0){
                 solicitudAnterior.getLicencia().setVencimiento(solicitudAnterior.getLicencia().getVencimiento().
                         plusDays(25));
@@ -158,7 +219,8 @@ public class AdminServiceImpl implements AdminService {
             }
 
             solicitud.setLicencia(solicitudAnterior.getLicencia());
-            solicitud.setEstado("ACEPTADA");
+            solicitud.setApruebaAdminID(adminAutenticado.getId().intValue());
+            solicitud.setEstado("ACEPTADO");
             solicitudRepository.save(solicitud);
             licenciaRepository.save(solicitudAnterior.getLicencia());
 

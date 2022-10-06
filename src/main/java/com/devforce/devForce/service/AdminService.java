@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface AdminService {
     public List<LicenciaDTO> getLicenciasDTO();
+    public List<LicenciaDTO> getLicenciasDTOasignadas();
+    public List<LicenciaDTO> getLicenciasDTOdisponibles();
     public List<Licencia> getLicencias();
     public ResponseEntity<RespuestaDTO> crearUsuario(RegistroDTO registroDTO);
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud);
