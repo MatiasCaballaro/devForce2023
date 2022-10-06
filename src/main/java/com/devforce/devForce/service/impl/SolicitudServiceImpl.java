@@ -111,7 +111,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
         Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findByArea(usuario.getMentorArea()).stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario))
-                .filter(solicitud -> solicitud.getEstado().equalsIgnoreCase("PENDIENTE-MENTOR")).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
+                .map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
     @Override
@@ -120,7 +120,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
         List<SolicitudDTO> solicitudes = this.solicitudRepository.findAll().stream().filter(solicitud -> !solicitud.getUsuario().equals(usuario))
-                .filter(solicitud -> solicitud.getEstado().equalsIgnoreCase("PENDIENTE-ADMIN")).map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
+                .map(solicitud -> crearSolicitudDTO(solicitud)).collect(Collectors.toList());
         return solicitudes;
     }
 

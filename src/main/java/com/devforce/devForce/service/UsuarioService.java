@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface UsuarioService {
 
@@ -16,5 +17,6 @@ public interface UsuarioService {
     public UsuarioDTO crearUsuarioDTO (Usuario usuario);
     public UserDetailsImpl obtenerUsuario();
     public ResponseEntity<RespuestaDTO> login(@Valid @RequestBody LoginRequest loginRequest);
+    public List<UsuarioDTO> getUsuariosDTOs();
 
 }

@@ -40,14 +40,14 @@ public class MentorServiceImpl implements MentorService {
             return respuestaDTO;
         }
 
-        if (!(solicitud.getEstado().equals("PENDIENTE-MENTOR"))){
+        if (!(solicitudUsuario.getEstado().equals("PENDIENTE-MENTOR"))){
             respuestaDTO.setMensaje("Las solicitud no se encuentra en PENDIENTE-MENTOR");
             respuestaDTO.setContenido(solicitud);
             return respuestaDTO;
         }
 
         assert mentor != null;
-        if (!solicitud.getArea().equals(mentor.getMentorArea())){
+        if (!solicitudUsuario.getArea().equals(mentor.getMentorArea())){
             respuestaDTO.setMensaje("La solicitud no pertenece al area " + mentor.getMentorArea());
             respuestaDTO.setContenido(solicitud);
             return respuestaDTO;
@@ -59,11 +59,11 @@ public class MentorServiceImpl implements MentorService {
             return respuestaDTO;
         }
 
-        solicitud.setApruebaMentorID((int) mentor.getId());
-        solicitudRepository.save(solicitud);
+        solicitudUsuario.setApruebaMentorID((int) mentor.getId());
+        solicitudRepository.save(solicitudUsuario);
         respuestaDTO.setOk(true);
-        respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
-        respuestaDTO.setContenido(solicitud);
+        respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitudUsuario.getEstado());
+        respuestaDTO.setContenido(solicitudUsuario);
         return respuestaDTO;
     }
 
@@ -72,18 +72,20 @@ public class MentorServiceImpl implements MentorService {
 
         RespuestaDTO respuestaDTO = verificarEstado(solicitud);
 
+        Solicitud solicitudUsuario = solicitudRepository.findById(solicitud.getId()).orElse(null);
+
         if (!respuestaDTO.isOk()){
             return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         } else {
-            if (solicitud.getTipo().equals("OTROS") || solicitud.getTipo().equals("ASESORAMIENTO")){
-                solicitud.setEstado("ACEPTADO");
+            if (solicitudUsuario.getTipo().equals("OTROS") || solicitudUsuario.getTipo().equals("ASESORAMIENTO")){
+                solicitudUsuario.setEstado("ACEPTADO");
             }
-            if (solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA-PLATAFORMA")){
-                solicitud.setEstado("PENDIENTE-ADMIN");
-                solicitud.setTiempoSolicitado(dias);
+            if (solicitudUsuario.getTipo().equals("UDEMY") || solicitudUsuario.getTipo().equals("OTRA-PLATAFORMA")){
+                solicitudUsuario.setEstado("PENDIENTE-ADMIN");
+                solicitudUsuario.setTiempoSolicitado(dias);
             }
-            solicitudRepository.save(solicitud);
-            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            solicitudRepository.save(solicitudUsuario);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitudUsuario.getEstado());
             return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
@@ -93,12 +95,14 @@ public class MentorServiceImpl implements MentorService {
 
         RespuestaDTO respuestaDTO = verificarEstado(solicitud);
 
+        Solicitud solicitudUsuario = solicitudRepository.findById(solicitud.getId()).orElse(null);
+
         if (!respuestaDTO.isOk()){
             return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         } else {
-            solicitud.setEstado("DENEGADO");
-            solicitudRepository.save(solicitud);
-            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            solicitudUsuario.setEstado("DENEGADO");
+            solicitudRepository.save(solicitudUsuario);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitudUsuario.getEstado());
             return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
@@ -108,12 +112,14 @@ public class MentorServiceImpl implements MentorService {
 
         RespuestaDTO respuestaDTO = verificarEstado(solicitud);
 
+        Solicitud solicitudUsuario = solicitudRepository.findById(solicitud.getId()).orElse(null);
+
         if (!respuestaDTO.isOk()){
             return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         } else {
-            solicitud.setEstado("DEVUELTA-USUARIO");
-            solicitudRepository.save(solicitud);
-            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitud.getEstado());
+            solicitudUsuario.setEstado("DEVUELTA-USUARIO");
+            solicitudRepository.save(solicitudUsuario);
+            respuestaDTO.setMensaje("La solicitud se encuentra en estado: " + solicitudUsuario.getEstado());
             return new ResponseEntity<>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
