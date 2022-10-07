@@ -152,29 +152,32 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud) {
         RespuestaDTO respuestaDTO;
+        Solicitud solicitudRecibida = solicitudRepository.findById(solicitud.getId()).orElse(null);
 
-        if (solicitud.getEstado().equals("PENDIENTE-ADMIN") == false) {
+        if(solicitudRecibida == null){
+            respuestaDTO = new RespuestaDTO(false, "la Solicitud Recibida no existe", null);
+            return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
+        }
+
+        if (solicitudRecibida.getEstado().equals("PENDIENTE-ADMIN") == false) {
             respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. No fue aprobada", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
 
         // Esta verificacion se podra utilizar cuando se hayan asignado los ID de los mentores a las solicitudes:
         /*
-        if (solicitud.getArea().equals(usuarioRepository.findById(solicitud.getApruebaMentorID()).getMentorArea()) == false) {
+        if (solicitudRecibida.getArea().equals(usuarioRepository.findById(solicitudRecibida.getApruebaMentorID()).getMentorArea()) == false) {
             respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. El mentor no pertenece al area de la licencia", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
          */
-
-
-        int solicitudesSimilares = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitud.getUsuario(), solicitud.getTipo(), "ACEPTADO").size();
-
+        int solicitudesSimilares = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitudRecibida.getUsuario(), solicitudRecibida.getTipo(), "ACEPTADO").size();
         if ( solicitudesSimilares == 0) {
-            return asignarNuevaLicencia(solicitud);
+            return asignarNuevaLicencia(solicitudRecibida);
         } else {
-            List<Solicitud> solicitudesSimilaresAceptadas = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitud.getUsuario(),
-                    solicitud.getTipo(), "ACEPTADO");
-            return renovarLicencia(solicitud, solicitudesSimilaresAceptadas.get(0));
+            List<Solicitud> solicitudesSimilaresAceptadas = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitudRecibida.getUsuario(),
+                    solicitudRecibida.getTipo(), "ACEPTADO");
+            return renovarLicencia(solicitudRecibida, solicitudesSimilaresAceptadas.get(0));
         }
     }
 
@@ -189,7 +192,7 @@ public class AdminServiceImpl implements AdminService {
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         } else {
 
-            Licencia licencia = licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(), "DISPONIBLE").get(1);
+            Licencia licencia = licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(), "DISPONIBLE").get(0);
             licencia.setVencimiento(LocalDate.now().plusDays(solicitud.getTiempoSolicitado()));
             solicitud.setLicencia(licencia);
             licencia.setEstado("ASIGNADA");
@@ -198,7 +201,7 @@ public class AdminServiceImpl implements AdminService {
             solicitudRepository.save(solicitud);
             licenciaRepository.save(licencia);
 
-            respuestaDTO = new RespuestaDTO(true, "lICENCIA ASIGNADA", solicitud.getLicencia().getId());
+            respuestaDTO = new RespuestaDTO(true, "lICENCIA ASIGNADA", solicitud.getLicencia());
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
@@ -225,24 +228,31 @@ public class AdminServiceImpl implements AdminService {
             solicitudRepository.save(solicitud);
             licenciaRepository.save(solicitudAnterior.getLicencia());
 
-            respuestaDTO = new RespuestaDTO(true, "lICENCIA RENOVADA", solicitud.getLicencia().getId());
+            respuestaDTO = new RespuestaDTO(true, "lICENCIA RENOVADA", solicitud.getLicencia());
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
     @Override
     public ResponseEntity<RespuestaDTO> rechazarSolicitudes(Solicitud solicitud){
+
+        Solicitud solicitudRecibida = solicitudRepository.findById(solicitud.getId()).orElse(null);
         UserDetailsImpl adminAutenticado = usuarioService.obtenerUsuario();
         RespuestaDTO respuestaDTO;
 
-        if(solicitud.getEstado() != "PENDIENTE-ADMIN" || solicitud.getApruebaMentorID() == 0){
+        if(solicitudRecibida == null){
+            respuestaDTO = new RespuestaDTO(false, "la Solicitud Recibida no existe", null);
+            return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
+        }
+
+        if(!solicitudRecibida.getEstado().equals("PENDIENTE-ADMIN") || solicitudRecibida.getApruebaMentorID() == 0){
             respuestaDTO = new RespuestaDTO(false, "La solicitud todavia no fue aprobada por el mentor", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
 
-        solicitud.setEstado("DENEGADA");
-        solicitud.setApruebaAdminID(adminAutenticado.getId().intValue());
-        solicitudRepository.save(solicitud);
-        respuestaDTO = new RespuestaDTO(true, "La Solicitud se rechazo correctamente", null);
+        solicitudRecibida.setEstado("DENEGADA");
+        solicitudRecibida.setApruebaAdminID(adminAutenticado.getId().intValue());
+        solicitudRepository.save(solicitudRecibida);
+        respuestaDTO = new RespuestaDTO(true, "La Solicitud se rechazo correctamente", solicitudRecibida);
         return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
     }
 
@@ -250,28 +260,32 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<RespuestaDTO> reservarLicencia(Licencia licencia){
         RespuestaDTO respuestaDTO;
 
-    if(!licencia.getEstado().equals("DISPONIBLE")){
+        Licencia licenciaRecibida = licenciaRepository.findById(licencia.getId());
+
+    if(!licenciaRecibida.getEstado().equals("DISPONIBLE")){
         respuestaDTO = new RespuestaDTO(false, "La licencia no se encuentra disponible para reservar", null);
         return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
     }
 
-    licencia.setEstado("RESERVADA");
-    licenciaRepository.save(licencia);
-    respuestaDTO = new RespuestaDTO(true, "La licencia se reservo correctamente", null);
+    licenciaRecibida.setEstado("RESERVADA");
+    licenciaRepository.save(licenciaRecibida);
+    respuestaDTO = new RespuestaDTO(true, "La licencia se reservo correctamente",  licenciaRecibida);
     return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<RespuestaDTO> revocarLicencia(Licencia licencia){
         RespuestaDTO respuestaDTO;
 
-        if(licencia.getEstado().equals("DISPONIBLE")){
+        Licencia licenciaRecibida = licenciaRepository.findById(licencia.getId());
+
+        if(licenciaRecibida.getEstado().equals("DISPONIBLE")){
             respuestaDTO = new RespuestaDTO(false, "La licencia no esta asignada", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
 
-        licencia.setEstado("DISPONIBLE");
-        licenciaRepository.save(licencia);
-        respuestaDTO = new RespuestaDTO(true, "La licencia " + licencia.getSerie() + " fue revocada perfectamente", null);
+        licenciaRecibida.setEstado("DISPONIBLE");
+        licenciaRepository.save(licenciaRecibida);
+        respuestaDTO = new RespuestaDTO(true, "La licencia " + licenciaRecibida.getSerie() + " fue revocada perfectamente", licenciaRecibida);
         return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
     }
 }
