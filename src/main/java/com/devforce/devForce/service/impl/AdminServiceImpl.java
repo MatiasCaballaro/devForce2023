@@ -260,7 +260,7 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<RespuestaDTO> reservarLicencia(Licencia licencia){
         RespuestaDTO respuestaDTO;
 
-        Licencia licenciaRecibida = licenciaRepository.findById(licencia.getId());
+        Licencia licenciaRecibida = licenciaRepository.findBySerie(licencia.getSerie());
 
     if(!licenciaRecibida.getEstado().equals("DISPONIBLE")){
         respuestaDTO = new RespuestaDTO(false, "La licencia no se encuentra disponible para reservar", null);
@@ -276,7 +276,7 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<RespuestaDTO> revocarLicencia(Licencia licencia){
         RespuestaDTO respuestaDTO;
 
-        Licencia licenciaRecibida = licenciaRepository.findById(licencia.getId());
+        Licencia licenciaRecibida = licenciaRepository.findBySerie(licencia.getSerie());
 
         if(licenciaRecibida.getEstado().equals("DISPONIBLE")){
             respuestaDTO = new RespuestaDTO(false, "La licencia no esta asignada", null);
