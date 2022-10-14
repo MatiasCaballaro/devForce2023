@@ -19,5 +19,5 @@ public class SolicitudDTO {
     private int apruebaMentorID;
     private int apruebaAdminID;
     private int tiempoSolicitado;
-    private UsuarioDTO usuarioDTO;
+    private UsuarioDTO usuario;
 }

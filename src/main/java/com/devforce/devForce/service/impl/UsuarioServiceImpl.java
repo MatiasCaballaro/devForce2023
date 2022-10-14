@@ -118,4 +118,12 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .body(new RespuestaDTO(true, "logueado", userDetails));
     }
 
+    @Override
+    public UsuarioDTO obtenerUsuarioLogueado(Authentication authentication){
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Usuario usuario = usuarioRepository.findById(userDetails.getId()).get();
+
+        return crearUsuarioDTO(usuario);
+    }
+
 }

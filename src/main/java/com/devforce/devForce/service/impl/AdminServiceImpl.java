@@ -144,10 +144,6 @@ public class AdminServiceImpl implements AdminService {
         return new ResponseEntity<>(respuestaDTO, HttpStatus.CREATED);
     }
 
-
-
-
-
     //Prueba
     @Override
     public ResponseEntity<RespuestaDTO> asignarLicencia(Solicitud solicitud) {

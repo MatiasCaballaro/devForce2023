@@ -155,8 +155,6 @@ public class UserInitializer implements CommandLineRunner {
                 solicitudRepository.save(solicitud);
             }
 
-
-
             //SOLICITUDES DE PRUEBA
             Solicitud solicitud1 = new Solicitud();
             solicitud1.setId(11);
@@ -194,6 +192,44 @@ public class UserInitializer implements CommandLineRunner {
             Licencia licenciaPrueba= licenciaRepository.findById(1L);
             System.out.println("licenciaPrueba = " + licenciaPrueba);
             log.info("Finished with data initialization");
+
+
+            Licencia licenciaNueva = new Licencia();
+            licenciaNueva.setId(20);
+            licenciaNueva.setSerie(faker.bothify("????##?###???###"));
+            licenciaNueva.setEstado("DISPONIBLE");
+            licenciaNueva.setPlataforma("OTRA PLATAFORMA");
+            licenciaNueva.setSolicitudes(new ArrayList<>());
+            System.out.println(licenciaNueva);
+            licenciaRepository.save(licenciaNueva);
+
+
+
+            Usuario usuarioRubio = new Usuario();
+            usuarioRubio.setId(20);
+            usuarioRubio.setNombre("Agustin");
+            usuarioRubio.setApellido("Rubio");
+            usuarioRubio.setUsername("AgustinRubio");
+            usuarioRubio.setEmail((usuarioRubio.getNombre()+"."+usuarioRubio.getApellido()+"@gire.com").toLowerCase());
+            usuarioRubio.setPassword(encoder.encode(usuarioRubio.getNombre()+"123"));
+            usuarioRubio.setPhone("123456789");
+            usuarioRubio.setHasTeams(false);
+            usuarioRubio.setRoles(userRoles);
+            System.out.println(usuarioRubio.toString());
+            usuarioRepository.save(usuarioRubio);
+
+            Usuario userUserValenBara = new Usuario();
+            userUserValenBara.setId(21);
+            userUserValenBara.setNombre("Valentin");
+            userUserValenBara.setApellido("Barallobre");
+            userUserValenBara.setUsername("ValentinBarallobre");
+            userUserValenBara.setEmail((userUserValenBara.getNombre()+"."+userUserValenBara.getApellido()+"@gire.com").toLowerCase());
+            userUserValenBara.setPassword(encoder.encode(userUserValenBara.getNombre()+"123"));
+            userUserValenBara.setPhone("123356789");
+            userUserValenBara.setHasTeams(true);
+            userUserValenBara.setRoles(userRoles);
+            System.out.println(userUserValenBara.toString());
+            usuarioRepository.save(userUserValenBara);
 
         }
     }

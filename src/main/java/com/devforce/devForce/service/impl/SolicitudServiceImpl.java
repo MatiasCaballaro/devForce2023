@@ -93,7 +93,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         solicitudDTO.setArea(solicitud.getArea());
         solicitudDTO.setLink(solicitud.getLink());
         solicitudDTO.setTiempoSolicitado(solicitud.getTiempoSolicitado());
-        solicitudDTO.setUsuarioDTO(usuarioService.crearUsuarioDTO(solicitud.getUsuario()));
+        solicitudDTO.setUsuario(usuarioService.crearUsuarioDTO(solicitud.getUsuario()));
 
         return solicitudDTO;
     }

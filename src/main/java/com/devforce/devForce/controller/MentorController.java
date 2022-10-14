@@ -14,17 +14,17 @@ public class MentorController {
     MentorServiceImpl mentorServiceImpl;
     @PutMapping("/aceptarSolicitud")
     @PreAuthorize("hasRole('MENTOR')")
-    ResponseEntity<RespuestaDTO> aceptarSolicitud (@RequestBody Solicitud solicitud, @RequestParam Integer dias){
+    ResponseEntity<RespuestaDTO> aceptarSolicitud (@RequestBody Solicitud solicitud, @RequestParam(required = false) Integer dias) throws Exception{
         return mentorServiceImpl.aceptarSolicitud(solicitud, dias);
     }
 
-    @PutMapping("/rechazarSolicitud")
+    @PutMapping("/rechazarSolicitudPlataforma")
     @PreAuthorize("hasRole('MENTOR')")
     ResponseEntity<RespuestaDTO> rechazarSolicitud (@RequestBody Solicitud solicitud){
         return mentorServiceImpl.rechazarSolicitud(solicitud);
     }
 
-   @PutMapping("/devolverSolicitud")
+   @PutMapping("/devolverSolicitudPlataforma")
    @PreAuthorize("hasRole('MENTOR')")
     ResponseEntity<RespuestaDTO> devolverSolicitud (@RequestBody Solicitud solicitud){
         return mentorServiceImpl.devolverSolicitud(solicitud);

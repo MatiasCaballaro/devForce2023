@@ -80,7 +80,7 @@ public class MentorServiceImpl implements MentorService {
             if (solicitudUsuario.getTipo().equals("OTROS") || solicitudUsuario.getTipo().equals("ASESORAMIENTO")){
                 solicitudUsuario.setEstado("ACEPTADO");
             }
-            if (solicitudUsuario.getTipo().equals("UDEMY") || solicitudUsuario.getTipo().equals("OTRA-PLATAFORMA")){
+            if (solicitudUsuario.getTipo().equals("UDEMY") || solicitudUsuario.getTipo().equals("OTRA PLATAFORMA")){
                 solicitudUsuario.setEstado("PENDIENTE-ADMIN");
                 solicitudUsuario.setTiempoSolicitado(dias);
             }

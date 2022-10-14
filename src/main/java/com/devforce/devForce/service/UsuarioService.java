@@ -6,6 +6,7 @@ import com.devforce.devForce.model.dto.authRequestDTO.LoginRequest;
 import com.devforce.devForce.model.entity.Usuario;
 import com.devforce.devForce.security.services.UserDetailsImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
@@ -18,5 +19,7 @@ public interface UsuarioService {
     public UserDetailsImpl obtenerUsuario();
     public ResponseEntity<RespuestaDTO> login(@Valid @RequestBody LoginRequest loginRequest);
     public List<UsuarioDTO> getUsuariosDTOs();
+
+    public UsuarioDTO obtenerUsuarioLogueado(Authentication authentication);
 
 }

@@ -7,6 +7,7 @@ import com.devforce.devForce.service.UsuarioService;
 import com.devforce.devForce.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class UsuarioController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @PutMapping("/updatedatos")
+    @PutMapping("/usuario/updatedatos")
     public ResponseEntity<RespuestaDTO> updateDatos(@RequestBody Usuario usuario) {
         return usuarioService.actualizarDatos(usuario);
     }
@@ -39,5 +40,10 @@ public class UsuarioController {
     @GetMapping("/test/usuarios")
     public List<Usuario> testUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    @GetMapping("/usuario/obtenerUsuario")
+    public UsuarioDTO obtenerUsuario(Authentication authentication){
+        return usuarioService.obtenerUsuarioLogueado(authentication);
     }
 }

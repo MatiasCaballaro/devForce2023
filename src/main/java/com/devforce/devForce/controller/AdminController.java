@@ -21,16 +21,19 @@ public class AdminController {
     @Autowired
     AdminServiceImpl adminServiceImpl;
     @PostMapping("/registrarUsuario")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RespuestaDTO> crearUsuario(@RequestBody RegistroDTO registroDTO) {
         return adminServiceImpl.crearUsuario(registroDTO);
     }
 
     @PostMapping("/asignarLicencia")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RespuestaDTO> asignarLicencia(@RequestBody Solicitud solicitud){
         return adminServiceImpl.asignarLicencia(solicitud);
     }
 
     @GetMapping("/licencias")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<LicenciaDTO> obtenerLicencias (){
         return adminServiceImpl.getLicenciasDTO();
     }
