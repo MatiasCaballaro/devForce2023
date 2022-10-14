@@ -50,10 +50,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioLogueado.setPhone(usuario.getPhone());
         usuarioLogueado.setHasTeams(usuario.getHasTeams());
 
-        if(usuarioLogueado.getMentorArea()!=null)
-        {
-            usuarioLogueado.setMentorArea(usuario.getMentorArea());
-        }
         if(usuarioRepository.existsByEmail(usuario.getEmail()))
         {
             if(!usuarioLogueado.getEmail().equals(usuario.getEmail()))
