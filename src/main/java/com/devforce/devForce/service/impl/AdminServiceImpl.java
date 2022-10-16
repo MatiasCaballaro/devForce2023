@@ -168,12 +168,27 @@ public class AdminServiceImpl implements AdminService {
         }
          */
         int solicitudesSimilares = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitudRecibida.getUsuario(), solicitudRecibida.getTipo(), "ACEPTADO").size();
+        int flagLicencias = 0;
         if ( solicitudesSimilares == 0) {
             return asignarNuevaLicencia(solicitudRecibida);
         } else {
             List<Solicitud> solicitudesSimilaresAceptadas = solicitudRepository.findByUsuarioAndTipoAndEstado(solicitudRecibida.getUsuario(),
                     solicitudRecibida.getTipo(), "ACEPTADO");
-            return renovarLicencia(solicitudRecibida, solicitudesSimilaresAceptadas.get(0));
+
+            for(int i = 0; i < solicitudesSimilares; i++){
+            if(solicitudesSimilaresAceptadas.get(i).getLicencia().getEstado().equals("ASIGNADA")){
+            flagLicencias = i;
+            break;
+            }
+            if(i == solicitudesSimilares-1){
+            flagLicencias = -1;
+            }
+            }
+            if(flagLicencias == -1){
+                return asignarNuevaLicencia(solicitudRecibida);
+            }else{
+            return renovarLicencia(solicitudRecibida, solicitudesSimilaresAceptadas.get(flagLicencias));
+            }
         }
     }
 
@@ -280,6 +295,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         licenciaRecibida.setEstado("DISPONIBLE");
+        licenciaRecibida.setVencimiento(null);
         licenciaRepository.save(licenciaRecibida);
         respuestaDTO = new RespuestaDTO(true, "La licencia " + licenciaRecibida.getSerie() + " fue revocada perfectamente", licenciaRecibida);
         return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.OK);
