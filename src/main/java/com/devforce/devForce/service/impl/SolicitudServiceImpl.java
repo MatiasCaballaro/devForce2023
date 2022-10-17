@@ -40,7 +40,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         UserDetailsImpl usuarioAutenticado = usuarioService.obtenerUsuario();
         Usuario usuario = usuarioRepository.findByEmail(usuarioAutenticado.getEmail());
 
-        if(solicitud.getTipo().isEmpty() || solicitud.getArea().isEmpty()  || solicitud.getDescripcion().isEmpty())
+        if(solicitud.getTipo().isEmpty() || solicitud.getArea().isEmpty())
         {
             RespuestaDTO respuestaDTO = new RespuestaDTO();
             respuestaDTO.setOk(false);

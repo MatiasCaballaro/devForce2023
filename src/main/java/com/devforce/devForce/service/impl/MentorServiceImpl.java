@@ -74,6 +74,13 @@ public class MentorServiceImpl implements MentorService {
 
         Solicitud solicitudUsuario = solicitudRepository.findById(solicitud.getId()).orElse(null);
 
+        if((solicitud.getTipo().equals("UDEMY") || solicitud.getTipo().equals("OTRA PLATAFORMA")) && dias < 1){
+            respuestaDTO.setOk(false);
+            respuestaDTO.setMensaje("Cantidad de dias no permitida");
+            respuestaDTO.setContenido(null);
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.FORBIDDEN);
+        }
+
         if (!respuestaDTO.isOk()){
             return new ResponseEntity<>(respuestaDTO, HttpStatus.BAD_REQUEST);
         } else {

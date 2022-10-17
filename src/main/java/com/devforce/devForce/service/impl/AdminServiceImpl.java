@@ -156,7 +156,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         if (solicitudRecibida.getEstado().equals("PENDIENTE-ADMIN") == false) {
-            respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. No fue aprobada", null);
+            respuestaDTO = new RespuestaDTO(false, "LICENCIA DENEGADA. No fue aprobada", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         }
 
@@ -199,7 +199,7 @@ public class AdminServiceImpl implements AdminService {
         RespuestaDTO respuestaDTO;
 
         if (licenciaRepository.findByPlataformaAndEstado(solicitud.getTipo(),"DISPONIBLE").size() == 0) {
-            respuestaDTO = new RespuestaDTO(false, "lICENCIA DENEGADA. No hay licencias disponibles por el momento.", null);
+            respuestaDTO = new RespuestaDTO(false, "LICENCIA DENEGADA. No hay licencias disponibles por el momento.", null);
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.FORBIDDEN);
         } else {
 
@@ -212,7 +212,7 @@ public class AdminServiceImpl implements AdminService {
             solicitudRepository.save(solicitud);
             licenciaRepository.save(licencia);
 
-            respuestaDTO = new RespuestaDTO(true, "lICENCIA ASIGNADA", solicitud.getLicencia());
+            respuestaDTO = new RespuestaDTO(true, "LICENCIA ASIGNADA", solicitud.getLicencia());
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
@@ -239,7 +239,7 @@ public class AdminServiceImpl implements AdminService {
             solicitudRepository.save(solicitud);
             licenciaRepository.save(solicitudAnterior.getLicencia());
 
-            respuestaDTO = new RespuestaDTO(true, "lICENCIA RENOVADA", solicitud.getLicencia());
+            respuestaDTO = new RespuestaDTO(true, "LICENCIA RENOVADA", solicitud.getLicencia());
             return new ResponseEntity<RespuestaDTO>(respuestaDTO, HttpStatus.ACCEPTED);
         }
     }
