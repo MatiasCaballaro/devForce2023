@@ -143,7 +143,7 @@ public class UserInitializer implements CommandLineRunner {
             //TEST MENTORES FRONT
             Usuario userCristianTeves = new Usuario();
             userCristianTeves.setId(4);
-            userCristianTeves.setNombre("Cristian Ariel");
+            userCristianTeves.setNombre("Cristian");
             userCristianTeves.setApellido("Teves");
             userCristianTeves.setUsername(userCristianTeves.getNombre() + userCristianTeves.getApellido());
             userCristianTeves.setEmail((userCristianTeves.getNombre() + "." + userCristianTeves.getApellido() + "@gire.com").toLowerCase());
